@@ -1,8 +1,7 @@
 # BAYT — بيت
 
 Pre-approved, fixed-price productized houses for Lebanon. A product line by
-[MTGRP / Metagroupe](https://mtgrp.xyz) — modelled on the
-[super.la SuperOS](https://www.super.la/superos) playbook, localized:
+[MTGRP / Metagroupe](https://mtgrp.xyz):
 one team, one contract, one USD price; houses engineered once as products
 (SAHEL · JABAL · WADI) and built with a network of Lebanese workshops.
 
