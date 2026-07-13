@@ -173,8 +173,9 @@ body.js .axo-scatter { display: block; }
 }
 body.js .pillar {
   position: absolute;
-  inset: 0;
-  padding: 0 48% 0 var(--pad);
+  inset: 0 48% 0 0; /* text owns the left 52%; % padding against a max-width box collapses on wide screens */
+  max-width: none;
+  padding: 0 24px 0 var(--pad);
   visibility: hidden;
 }
 .pillar-index {
@@ -413,9 +414,9 @@ body.js .tl-bar b { opacity: 0; }
     width: min(80vw, 340px);
   }
   body.js .pillar {
-    padding: 0 var(--pad);
+    inset: 0;
+    padding: 0 var(--pad) 9vh;
     justify-content: flex-end;
-    padding-bottom: 9vh;
   }
   .pillar p { font-size: 1rem; }
   .tl-row { grid-template-columns: 1fr; gap: 8px; }
