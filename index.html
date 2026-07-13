@@ -58,6 +58,71 @@
     <div class="system-pin">
       <p class="section-label">The system <span class="ar">النظام</span></p>
 
+      <div class="system-visual" aria-hidden="true">
+        <svg id="system-axo" viewBox="0 0 400 360" fill="none">
+
+          <!-- scattered fragments: the mess of a normal build (JS shows & converges them) -->
+          <g class="axo-scatter" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" opacity="0.5">
+            <line class="frag" x1="34" y1="64" x2="66" y2="50"/>
+            <line class="frag" x1="330" y1="48" x2="362" y2="62"/>
+            <line class="frag" x1="48" y1="200" x2="72" y2="216"/>
+            <line class="frag" x1="352" y1="180" x2="330" y2="204"/>
+            <line class="frag" x1="70" y1="322" x2="102" y2="310"/>
+            <line class="frag" x1="300" y1="330" x2="332" y2="316"/>
+            <line class="frag" x1="150" y1="40" x2="180" y2="52"/>
+            <line class="frag" x1="238" y1="34" x2="262" y2="50"/>
+            <line class="frag" x1="30" y1="140" x2="52" y2="122"/>
+            <line class="frag" x1="368" y1="120" x2="344" y2="136"/>
+            <line class="frag" x1="180" y1="336" x2="214" y2="330"/>
+            <line class="frag" x1="120" y1="120" x2="148" y2="108"/>
+          </g>
+
+          <!-- the house: base / walls / roof groups so it can explode -->
+          <g id="axo-full" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <g class="axo-base">
+              <path class="hp" pathLength="1" d="M80 240 L80 254 L200 314 L320 254 L320 240"/>
+              <path class="hp" pathLength="1" d="M200 300 L200 314"/>
+            </g>
+            <g class="axo-wall-left">
+              <path class="hp" pathLength="1" d="M80 170 L80 240 L200 300 L200 230 Z"/>
+              <path class="hp" pathLength="1" d="M120 258 v-32 M158 277 v-32" stroke-width="1"/>
+            </g>
+            <g class="axo-wall-right">
+              <path class="hp" pathLength="1" d="M200 300 L320 240 L320 170 L200 230"/>
+              <path class="hp" pathLength="1" d="M266 267 v-30 M296 252 v-30" stroke-width="1"/>
+              <path class="hp" pathLength="1" d="M218 291 L218 247 L236 238 L236 282" stroke-width="1"/>
+            </g>
+            <g class="axo-roof">
+              <path class="hp" pathLength="1" d="M80 170 L140 68 L260 128 L200 230 Z"/>
+              <path class="hp" pathLength="1" d="M200 230 L320 170 L260 128"/>
+              <path class="hp-hidden" d="M140 68 L200 110 L320 170" stroke-width="1" stroke-dasharray="4 4" opacity="0"/>
+            </g>
+          </g>
+
+          <!-- productize: the same house stamped again (hidden until phase 2) -->
+          <g class="axo-copies">
+            <use class="axo-copy" href="#axo-full" opacity="0" transform="translate(-15 8) scale(0.5)"/>
+            <use class="axo-copy" href="#axo-full" opacity="0" transform="translate(215 8) scale(0.5)"/>
+          </g>
+
+          <!-- localize: part labels with dashed leaders (hidden until phase 3) -->
+          <g class="axo-labels" font-size="12" font-family="EB Garamond, Georgia, serif" font-style="italic" fill="currentColor">
+            <g class="axo-label" opacity="0">
+              <text x="20" y="44">panels — Zouk</text>
+              <path d="M105 40 L136 26" stroke="currentColor" stroke-width="1" stroke-dasharray="3 3" fill="none"/>
+            </g>
+            <g class="axo-label" opacity="0">
+              <text x="390" y="352" text-anchor="end">stone — Batroun</text>
+              <path d="M300 348 L252 330" stroke="currentColor" stroke-width="1" stroke-dasharray="3 3" fill="none"/>
+            </g>
+            <g class="axo-label" opacity="0">
+              <text x="390" y="214" text-anchor="end">joinery — Tripoli</text>
+              <path d="M306 210 L268 252" stroke="currentColor" stroke-width="1" stroke-dasharray="3 3" fill="none"/>
+            </g>
+          </g>
+        </svg>
+      </div>
+
       <div class="pillar" data-pillar="1">
         <span class="pillar-index">01</span>
         <h2>Optimize<span class="dot">.</span></h2>

@@ -52,6 +52,45 @@
       scrub: 0.5
     }
   });
+
+  /* the axo visual transforms through the three pillars on the same timeline:
+     1 scattered fragments converge while the house draws itself (Optimize)
+     2 the same house stamps out into copies (Productize)
+     3 the house explodes into labelled parts (Localize) */
+  if (document.getElementById('system-axo')) {
+    gsap.set('#system-axo .hp', { strokeDasharray: 1, strokeDashoffset: 1 });
+
+    // 1 — converge & draw
+    sysTl.to('#system-axo .frag', {
+      scale: 0.04, opacity: 0, svgOrigin: '200 210',
+      stagger: 0.015, duration: 0.45, ease: 'power2.in'
+    }, 0);
+    sysTl.to('#system-axo .hp', {
+      strokeDashoffset: 0, stagger: 0.03, duration: 0.5, ease: 'power1.inOut'
+    }, 0.05);
+    sysTl.to('#system-axo .hp-hidden', { opacity: 0.45, duration: 0.2 }, 0.65);
+
+    // 2 — stamp copies
+    sysTl.fromTo('#system-axo .axo-copy',
+      { opacity: 0, y: 26 },
+      { opacity: 0.55, y: 0, stagger: 0.12, duration: 0.4, ease: 'power2.out' }, 1.05);
+    sysTl.to('#system-axo .axo-copy', { opacity: 0, duration: 0.25 }, 1.75);
+
+    // 3 — explode into parts + labels
+    const partMoves = [
+      ['.axo-roof',       { x: 0,   y: -48 }],
+      ['.axo-wall-left',  { x: -32, y: 16 }],
+      ['.axo-wall-right', { x: 32,  y: 16 }],
+      ['.axo-base',       { x: 0,   y: 20 }]
+    ];
+    partMoves.forEach(([sel, move]) => {
+      sysTl.to('#system-axo ' + sel, {
+        ...move, duration: 0.5, ease: 'power2.inOut'
+      }, 2.05);
+    });
+    sysTl.to('#system-axo .axo-roof path', { stroke: '#b4552d', duration: 0.4 }, 2.05);
+    sysTl.to('#system-axo .axo-label', { opacity: 1, stagger: 0.08, duration: 0.3 }, 2.4);
+  }
   pillars.forEach((p, i) => {
     sysTl.set(p, { visibility: 'visible' }, i);
     sysTl.fromTo(p,

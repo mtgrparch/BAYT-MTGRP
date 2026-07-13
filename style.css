@@ -149,6 +149,20 @@ body.js .system-pin {
   height: 100vh;
   height: 100svh;
 }
+.system-visual {
+  position: absolute;
+  top: 50%;
+  right: var(--pad);
+  transform: translateY(-50%);
+  width: min(44vw, 520px);
+  color: var(--ink);
+  pointer-events: none;
+}
+.system-visual svg { width: 100%; height: auto; display: block; }
+/* scatter fragments only exist for the JS choreography */
+.axo-scatter { display: none; }
+body.js .axo-scatter { display: block; }
+
 .pillar {
   position: relative;
   padding: 8vh var(--pad);
@@ -160,32 +174,32 @@ body.js .system-pin {
 body.js .pillar {
   position: absolute;
   inset: 0;
-  padding: 0 var(--pad);
+  padding: 0 48% 0 var(--pad);
   visibility: hidden;
 }
 .pillar-index {
   font-family: var(--sans);
   font-weight: 700;
-  font-size: clamp(4rem, 12vw, 10rem);
+  font-size: clamp(4rem, 10vw, 8rem);
   line-height: 1;
   color: transparent;
   -webkit-text-stroke: 1px var(--rule);
   position: absolute;
-  right: var(--pad);
-  top: 18vh;
+  left: var(--pad);
+  bottom: 5vh;
   z-index: -1;
 }
 .pillar h2 {
   font-family: var(--sans);
   font-weight: 800;
-  font-size: clamp(3rem, 9vw, 7.5rem);
+  font-size: clamp(2.6rem, 6.5vw, 5.5rem);
   letter-spacing: -0.03em;
   line-height: 0.95;
   margin-bottom: 3vh;
 }
 .pillar p {
   font-size: clamp(1.05rem, 1rem + 0.5vw, 1.4rem);
-  max-width: 34em;
+  max-width: 30em;
 }
 
 /* ── 04 TIMELINE ── */
@@ -390,7 +404,20 @@ body.js .tl-bar b { opacity: 0; }
 
 /* ── MOBILE ── */
 @media (max-width: 768px) {
-  .pillar-index { top: 10vh; }
+  .pillar-index { display: none; }
+  .system-visual {
+    top: 88px;
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
+    width: min(80vw, 340px);
+  }
+  body.js .pillar {
+    padding: 0 var(--pad);
+    justify-content: flex-end;
+    padding-bottom: 9vh;
+  }
+  .pillar p { font-size: 1rem; }
   .tl-row { grid-template-columns: 1fr; gap: 8px; }
   .tl-old i, .tl-new i { height: 10px; width: calc(var(--v) * 1.7%); }
   .tl-bar b { font-size: 0.72rem; }
