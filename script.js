@@ -6,11 +6,24 @@
   document.body.classList.add('js');
   gsap.registerPlugin(ScrollTrigger);
 
+  /* pinned sections + browser scroll restoration corrupt trigger
+     measurement on reload — always start clean at the top */
+  if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+
   const BLUR_FROM = { filter: 'blur(10px)', opacity: 0, y: 20 };
   const BLUR_TO = { filter: 'blur(0px)', opacity: 1, y: 0, ease: 'power2.out' };
 
   /* ── hero: staggered blur-in on load ── */
-  gsap.fromTo('.reveal-load', BLUR_FROM, { ...BLUR_TO, duration: 0.8, stagger: 0.14, delay: 0.25 });
+  const entrance = gsap.fromTo('.reveal-load', BLUR_FROM, { ...BLUR_TO, duration: 0.8, stagger: 0.14, delay: 0.25 });
+  /* if the user scrolls before the entrance finishes, complete it instantly
+     so it can never fight the hero scroll-fade over the same properties */
+  const finishEntrance = () => {
+    if (window.scrollY > 40 && entrance.progress() < 1) {
+      entrance.progress(1);
+      window.removeEventListener('scroll', finishEntrance);
+    }
+  };
+  window.addEventListener('scroll', finishEntrance, { passive: true });
 
   /* ── progress bar ── */
   gsap.to('#progress-bar', {
@@ -19,21 +32,30 @@
     scrollTrigger: { start: 0, end: 'max', scrub: 0.3 }
   });
 
-  /* ── hero: wordmark shrinks & drifts up as you leave ── */
-  gsap.to('#hero-wordmark', {
-    scale: 0.55,
-    yPercent: -18,
-    opacity: 0.08,
-    transformOrigin: '50% 100%',
-    ease: 'none',
-    scrollTrigger: { trigger: '#hero', start: 'top top', end: 'bottom top', scrub: true }
-  });
-  gsap.to('.badge, .hero-tag, .hero-ctas, .hero-stats, .hero-trust', {
-    opacity: 0,
-    y: -30,
-    ease: 'none',
-    scrollTrigger: { trigger: '#hero', start: 'top top', end: '45% top', scrub: true }
-  });
+  /* ── hero: wordmark shrinks & drifts up as you leave ──
+     explicit from-values + immediateRender:false — otherwise the scrub
+     captures its start while the entrance blur-in still has opacity 0,
+     and the hero never comes back when scrolling up */
+  gsap.fromTo('#hero-wordmark',
+    { scale: 1, yPercent: 0, opacity: 1 },
+    {
+      scale: 0.55,
+      yPercent: -18,
+      opacity: 0.08,
+      transformOrigin: '50% 100%',
+      ease: 'none',
+      immediateRender: false,
+      scrollTrigger: { trigger: '#hero', start: 'top top', end: 'bottom top', scrub: true }
+    });
+  gsap.fromTo('.badge, .hero-tag, .hero-ctas, .hero-stats, .hero-trust',
+    { opacity: 1, y: 0 },
+    {
+      opacity: 0,
+      y: -30,
+      ease: 'none',
+      immediateRender: false,
+      scrollTrigger: { trigger: '#hero', start: 'top top', end: '60% top', scrub: true }
+    });
 
   /* ── statement: word-by-word blur-in, scrubbed ── */
   document.querySelectorAll('[data-split]').forEach((el) => {
