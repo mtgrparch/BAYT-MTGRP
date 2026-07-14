@@ -6,7 +6,7 @@
   --fg: #f2efe9;
   --muted: rgba(255, 255, 255, 0.75);
   --faint: rgba(255, 255, 255, 0.55);
-  --accent: #cf6b3f;           /* terracotta, tuned for black */
+  --accent: #d6c6a8;           /* muted sand */
   --rule: rgba(255, 255, 255, 0.14);
   --serif: 'Instrument Serif', Georgia, serif;
   --sans: 'Barlow', sans-serif;
@@ -89,7 +89,7 @@ em { font-style: italic; }
   z-index: -1;
   pointer-events: none;
   background:
-    radial-gradient(640px 420px at 72% 16%, rgba(207,107,63,0.10), transparent 65%),
+    radial-gradient(640px 420px at 72% 16%, rgba(214,198,168,0.08), transparent 65%),
     radial-gradient(900px 600px at 18% 85%, rgba(255,255,255,0.05), transparent 65%),
     #000;
 }
@@ -511,6 +511,7 @@ body.js .tl-bar b { opacity: 0; }
   flex-direction: column;
   gap: 20px;
 }
+.house-fig { background: #e9dfca; border-radius: 14px; padding: 8px; }
 .house-fig svg { width: 100%; height: auto; display: block; }
 .house h3 {
   font-family: var(--serif);
@@ -608,7 +609,7 @@ body.js .tl-bar b { opacity: 0; }
   content: "";
   position: absolute;
   inset: 0;
-  background: radial-gradient(700px 400px at 50% 65%, rgba(207,107,63,0.12), transparent 70%);
+  background: radial-gradient(700px 400px at 50% 65%, rgba(214,198,168,0.10), transparent 70%);
   pointer-events: none;
 }
 .cta-big {

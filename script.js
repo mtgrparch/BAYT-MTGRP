@@ -74,11 +74,11 @@
       stagger: 0.015, duration: 0.45, ease: 'power2.in'
     }, 0);
     sysTl.to('#system-axo .hp', {
-      strokeDashoffset: 0, stagger: 0.03, duration: 0.5, ease: 'power1.inOut'
+      strokeDashoffset: 0, stagger: { amount: 0.45 }, duration: 0.25, ease: 'power1.inOut'
     }, 0.05);
     sysTl.to('#system-axo .hp-hidden', { opacity: 0.4, duration: 0.2 }, 0.65);
     sysTl.to('#system-axo .axo-ground, #system-axo .axo-tech', { opacity: 1, duration: 0.3 }, 0.35);
-    sysTl.to('#system-axo .axo-fill', { opacity: 1, duration: 0.25, stagger: 0.02 }, 0.72);
+    sysTl.to('#system-axo .axo-fill', { opacity: 1, duration: 0.2, stagger: { amount: 0.15 } }, 0.72);
 
     // 2 — stamp copies
     sysTl.fromTo('#system-axo .axo-copy',
