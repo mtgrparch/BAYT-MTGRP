@@ -4,45 +4,97 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>BAYT — Pre-approved houses for Lebanon | by MTGRP</title>
-  <meta name="description" content="BAYT is a product line of pre-approved, fixed-price houses for Lebanon by MTGRP — Metagroupe. Designed once, engineered as a product, built with Lebanese makers in twelve months.">
+  <title>BEIT — Pre-approved houses for Lebanon | by MTGRP</title>
+  <meta name="description" content="BEIT is a product line of pre-approved, fixed-price houses for Lebanon by MTGRP — Metagroupe. Designed once, engineered as a product, built with Lebanese makers in twelve months.">
   <meta name="author" content="MTGRP — Metagroupe">
   <link rel="canonical" href="https://bayt.mtgrp.xyz/">
 
   <meta property="og:type" content="website">
-  <meta property="og:title" content="BAYT — Pre-approved houses for Lebanon">
+  <meta property="og:title" content="BEIT — Pre-approved houses for Lebanon">
   <meta property="og:description" content="A house as a product. Designed once, pre-approved, fixed price in USD, built with Lebanese makers in twelve months. By MTGRP.">
-  <meta property="og:site_name" content="BAYT by MTGRP">
+  <meta property="og:site_name" content="BEIT by MTGRP">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Karla:wght@400;700;800&family=EB+Garamond:ital,wght@0,400;1,400;1,500&family=Amiri:ital@0;1&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Barlow:wght@300;400;500;600&family=Karla:wght@800&family=Amiri:ital@0;1&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="style.css?v=2">
+  <link rel="stylesheet" href="style.css?v=4">
 </head>
 <body>
 
-  <!-- ── FIXED CHROME (blend-mode identity, like mtgrp.xyz) ── -->
+  <!-- ── ATMOSPHERE: blueprint grid + glows ── -->
+  <div id="bg" aria-hidden="true"></div>
+
+  <!-- ── FIXED CHROME (MTGRP difference-blend identity) ── -->
   <header id="chrome">
     <a id="chrome-mtgrp" href="https://mtgrp.xyz" title="MTGRP — Metagroupe">MTGRP<span>&nbsp;/ Metagroupe</span></a>
     <a id="chrome-contact" href="mailto:metagroupearch@gmail.com">+ Enquire</a>
   </header>
+
+  <nav id="glass-nav" class="liquid-glass" aria-label="Sections">
+    <a href="#houses">Houses</a>
+    <a href="#system">System</a>
+    <a href="#timeline">The math</a>
+    <a href="#process">Process</a>
+    <a class="nav-cta" href="mailto:metagroupearch@gmail.com?subject=BEIT%20—%20plot%20review">Start a plot review
+      <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M7 17L17 7M7 7h10v10"/></svg>
+    </a>
+  </nav>
+
   <div id="progress-bar" aria-hidden="true"></div>
 
   <!-- ── 01 HERO ── -->
   <section id="hero">
     <div class="hero-inner">
-      <p class="hero-kicker reveal">A product line by MTGRP — Beirut · Madrid · Milan</p>
-      <h1 id="hero-wordmark">
-        <span class="latin">BAYT</span><span class="arabic">بيت</span>
+      <div class="badge liquid-glass reveal-load">
+        <span class="badge-new">New</span>
+        Reserving 2027 builds — limited plots per region
+      </div>
+
+      <h1 id="hero-wordmark" class="reveal-load">
+        <span class="latin">BEIT</span><span class="arabic">بيت</span>
       </h1>
-      <p class="hero-tag">
-        <em>Pre-approved houses for Lebanon.</em><br>
-        Designed once. Engineered as a product.<br>
-        Built with Lebanese makers — in twelve months, at a fixed price.
+
+      <p class="hero-tag reveal-load">
+        Pre-approved houses for Lebanon. Designed once, engineered as a product,
+        built with Lebanese makers — in twelve months, at a fixed USD price.
       </p>
+
+      <div class="hero-ctas reveal-load">
+        <a class="btn-solid" href="mailto:metagroupearch@gmail.com?subject=BEIT%20—%20plot%20review">
+          Request a plot review
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M7 17L17 7M7 7h10v10"/></svg>
+        </a>
+        <a class="btn-ghost" href="#houses">See the houses
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+        </a>
+      </div>
+
+      <div class="hero-stats reveal-load">
+        <div class="stat liquid-glass">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+          <span class="stat-num">12</span>
+          <span class="stat-label">Months — land to keys</span>
+        </div>
+        <div class="stat liquid-glass">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h4"/></svg>
+          <span class="stat-num">01</span>
+          <span class="stat-label">Contract — one fixed USD price</span>
+        </div>
+        <div class="stat liquid-glass">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 9l9-6 9 6M5 11v9h14v-9M9 20v-6h6v6"/></svg>
+          <span class="stat-num">03</span>
+          <span class="stat-label">Models — pre-approved, site-tuned</span>
+        </div>
+      </div>
     </div>
-    <div class="hero-scroll-hint" aria-hidden="true">scroll ↓</div>
+
+    <div class="hero-trust reveal-load">
+      <div class="trust-pill liquid-glass">Built on a fixed network of Lebanese makers</div>
+      <div class="trust-row">
+        <span>Batroun</span><span>Tripoli</span><span>Zouk</span><span>Beirut</span><span>Zahlé</span>
+      </div>
+    </div>
   </section>
 
   <!-- ── 02 STATEMENT ── -->
@@ -56,10 +108,38 @@
   <!-- ── 03 THE SYSTEM — three pillars, pinned ── -->
   <section id="system">
     <div class="system-pin">
-      <p class="section-label">The system <span class="ar">النظام</span></p>
+      <p class="section-label">// The system <span class="ar">النظام</span></p>
 
       <div class="system-visual" aria-hidden="true">
         <svg id="system-axo" viewBox="0 0 400 360" fill="none">
+          <defs>
+            <radialGradient id="sys-sh"><stop offset="0%" stop-color="#ffffff" stop-opacity="0.09"/><stop offset="100%" stop-color="#ffffff" stop-opacity="0"/></radialGradient>
+            <pattern id="sys-stone" width="16" height="9" patternUnits="userSpaceOnUse">
+              <path d="M0 4.5 H16 M4 0 V4.5 M12 4.5 V9" stroke="#ffffff" stroke-width="0.6" opacity="0.35" fill="none"/>
+            </pattern>
+          </defs>
+
+          <!-- ground: light pool + site marks (fades in as the house forms) -->
+          <g class="axo-ground" opacity="0">
+            <ellipse cx="200" cy="310" rx="160" ry="26" fill="url(#sys-sh)"/>
+            <path d="M36 342 l44 -22 M320 340 l44 -22 M20 292 l30 -15 M350 290 l30 -15" stroke="#ffffff" opacity="0.18" stroke-width="1"/>
+            <path d="M20 34 h12 M26 28 v12 M368 34 h12 M374 28 v12" stroke="#ffffff" stroke-width="1" opacity="0.3"/>
+          </g>
+
+          <!-- technical annotations: levels, datum, north (fades in with ground) -->
+          <g class="axo-tech" opacity="0" font-family="Barlow, sans-serif" font-size="9" fill="rgba(255,255,255,0.65)">
+            <path d="M46 68 V254 M42 254 h8 M42 170 h8 M42 68 h8" stroke="rgba(255,255,255,0.5)" stroke-width="1" fill="none"/>
+            <path d="M50 254 H78 M50 170 H78 M50 68 H136" stroke="rgba(255,255,255,0.28)" stroke-width="1" stroke-dasharray="3 3" fill="none"/>
+            <text x="40" y="257" text-anchor="end">±0.00</text>
+            <text x="40" y="173" text-anchor="end">+3.40</text>
+            <text x="40" y="71" text-anchor="end">+7.80</text>
+            <g stroke="rgba(255,255,255,0.5)" stroke-width="1" fill="none">
+              <circle cx="366" cy="46" r="10"/>
+              <path d="M366 53 V39"/>
+              <path d="M362 42 L366 35 L370 42 Z" fill="rgba(255,255,255,0.65)" stroke="none"/>
+            </g>
+            <text x="366" y="68" text-anchor="middle">N</text>
+          </g>
 
           <!-- scattered fragments: the mess of a normal build (JS shows & converges them) -->
           <g class="axo-scatter" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" opacity="0.5">
@@ -78,21 +158,30 @@
           </g>
 
           <!-- the house: base / walls / roof groups so it can explode -->
-          <g id="axo-full" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <g id="axo-full" stroke="#f2efe9" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
             <g class="axo-base">
+              <path class="axo-fill" opacity="0" d="M80 240 L200 300 L200 314 L80 254 Z" fill="rgba(255,255,255,0.05)"/>
+              <path class="axo-fill" opacity="0" d="M80 240 L200 300 L200 314 L80 254 Z" fill="url(#sys-stone)"/>
+              <path class="axo-fill" opacity="0" d="M200 300 L320 240 L320 254 L200 314 Z" fill="rgba(255,255,255,0.03)"/>
+              <path class="axo-fill" opacity="0" d="M200 300 L320 240 L320 254 L200 314 Z" fill="url(#sys-stone)"/>
               <path class="hp" pathLength="1" d="M80 240 L80 254 L200 314 L320 254 L320 240"/>
               <path class="hp" pathLength="1" d="M200 300 L200 314"/>
             </g>
             <g class="axo-wall-left">
+              <path class="axo-fill" opacity="0" d="M80 170 L200 230 L200 300 L80 240 Z" fill="rgba(255,255,255,0.08)"/>
               <path class="hp" pathLength="1" d="M80 170 L80 240 L200 300 L200 230 Z"/>
-              <path class="hp" pathLength="1" d="M120 258 v-32 M158 277 v-32" stroke-width="1"/>
+              <path class="hp" pathLength="1" d="M120 258 v-32 M158 277 v-32" stroke="#cf6b3f" stroke-width="2"/>
             </g>
             <g class="axo-wall-right">
+              <path class="axo-fill" opacity="0" d="M200 230 L320 170 L320 240 L200 300 Z" fill="rgba(255,255,255,0.04)"/>
+              <path class="axo-fill" opacity="0" d="M218 291 L218 247 L236 238 L236 282 Z" fill="rgba(207,107,63,0.3)"/>
               <path class="hp" pathLength="1" d="M200 300 L320 240 L320 170 L200 230"/>
-              <path class="hp" pathLength="1" d="M266 267 v-30 M296 252 v-30" stroke-width="1"/>
+              <path class="hp" pathLength="1" d="M266 267 v-30 M296 252 v-30" stroke="#cf6b3f" stroke-width="2"/>
               <path class="hp" pathLength="1" d="M218 291 L218 247 L236 238 L236 282" stroke-width="1"/>
             </g>
             <g class="axo-roof">
+              <path class="axo-fill" opacity="0" d="M80 170 L140 68 L260 128 L200 230 Z" fill="#cf6b3f" fill-opacity="0.85"/>
+              <path class="axo-fill" opacity="0" d="M200 230 L320 170 L260 128 Z" fill="rgba(255,255,255,0.10)"/>
               <path class="hp" pathLength="1" d="M80 170 L140 68 L260 128 L200 230 Z"/>
               <path class="hp" pathLength="1" d="M200 230 L320 170 L260 128"/>
               <path class="hp-hidden" d="M140 68 L200 110 L320 170" stroke-width="1" stroke-dasharray="4 4" opacity="0"/>
@@ -106,18 +195,18 @@
           </g>
 
           <!-- localize: part labels with dashed leaders (hidden until phase 3) -->
-          <g class="axo-labels" font-size="12" font-family="EB Garamond, Georgia, serif" font-style="italic" fill="currentColor">
+          <g class="axo-labels" font-size="12" font-family="'Instrument Serif', Georgia, serif" font-style="italic" fill="rgba(255,255,255,0.85)">
             <g class="axo-label" opacity="0">
               <text x="20" y="44">panels — Zouk</text>
-              <path d="M105 40 L136 26" stroke="currentColor" stroke-width="1" stroke-dasharray="3 3" fill="none"/>
+              <path d="M105 40 L136 26" stroke="rgba(255,255,255,0.5)" stroke-width="1" stroke-dasharray="3 3" fill="none"/>
             </g>
             <g class="axo-label" opacity="0">
               <text x="390" y="352" text-anchor="end">stone — Batroun</text>
-              <path d="M300 348 L252 330" stroke="currentColor" stroke-width="1" stroke-dasharray="3 3" fill="none"/>
+              <path d="M300 348 L252 330" stroke="rgba(255,255,255,0.5)" stroke-width="1" stroke-dasharray="3 3" fill="none"/>
             </g>
             <g class="axo-label" opacity="0">
               <text x="390" y="214" text-anchor="end">joinery — Tripoli</text>
-              <path d="M306 210 L268 252" stroke="currentColor" stroke-width="1" stroke-dasharray="3 3" fill="none"/>
+              <path d="M306 210 L268 252" stroke="rgba(255,255,255,0.5)" stroke-width="1" stroke-dasharray="3 3" fill="none"/>
             </g>
           </g>
         </svg>
@@ -137,7 +226,7 @@
         <span class="pillar-index">02</span>
         <h2>Productize<span class="dot">.</span></h2>
         <p>
-          Each BAYT is a finished product, not a blank page. Engineered once, priced once,
+          Each BEIT is a finished product, not a blank page. Engineered once, priced once,
           approved once — then adapted to your plot, your orientation, your slope.
           No redesign, no surprises.
         </p>
@@ -157,7 +246,7 @@
 
   <!-- ── 04 TIMELINE COMPARISON ── -->
   <section id="timeline">
-    <p class="section-label reveal">The math <span class="ar">الحساب</span></p>
+    <p class="section-label reveal">// The math <span class="ar">الحساب</span></p>
     <h2 class="timeline-title reveal">Four to six years,<br>compressed to <em>twelve months</em>.</h2>
 
     <div class="tl-rows">
@@ -189,8 +278,8 @@
         <span class="tl-total-label">The usual way</span>
         <span class="tl-total-num"><span class="count" data-count="60">0</span><small>months</small></span>
       </div>
-      <div class="tl-total-col tl-total-bayt">
-        <span class="tl-total-label">The BAYT way</span>
+      <div class="tl-total-col tl-total-beit">
+        <span class="tl-total-label">The BEIT way</span>
         <span class="tl-total-num"><span class="count" data-count="12">0</span><small>months</small></span>
       </div>
     </div>
@@ -199,83 +288,174 @@
   <!-- ── 05 THE HOUSES — pinned horizontal scroll ── -->
   <section id="houses">
     <div class="houses-pin">
-      <p class="section-label houses-label">The houses <span class="ar">البيوت</span></p>
+      <p class="section-label houses-label">// The houses <span class="ar">البيوت</span></p>
       <div class="houses-track">
 
-        <article class="house">
+        <article class="house liquid-glass">
           <div class="house-fig">
-            <svg viewBox="0 0 400 300" fill="none" stroke="currentColor" stroke-width="1.5" aria-label="SAHEL — axonometric line drawing">
-              <path d="M60 200 L200 130 L340 200 L200 270 Z"/>
-              <path d="M60 200 L60 160 L200 90 L340 160 L340 200"/>
-              <path d="M200 130 L200 90"/>
-              <path d="M200 270 L200 230 L60 160 M200 230 L340 160"/>
-              <path d="M110 185 L110 145 M150 205 L150 165 M250 205 L250 165 M290 185 L290 145" stroke-width="1"/>
-              <path d="M30 210 L60 200 M340 200 L372 212" stroke-dasharray="4 4" stroke-width="1"/>
+            <svg viewBox="0 0 400 300" aria-label="SAHEL — coastal bungalow, isometric drawing">
+              <defs>
+                <radialGradient id="s-sh"><stop offset="0%" stop-color="#ffffff" stop-opacity="0.09"/><stop offset="100%" stop-color="#ffffff" stop-opacity="0"/></radialGradient>
+              </defs>
+              <path d="M20 28 h12 M26 22 v12 M368 272 h12 M374 266 v12" stroke="#ffffff" stroke-width="1" opacity="0.3"/>
+              <circle cx="54" cy="46" r="10" stroke="#cf6b3f" stroke-width="1.5" fill="none"/>
+              <path d="M22 78 Q54 8 128 24" stroke="#cf6b3f" stroke-width="1" stroke-dasharray="3 4" fill="none" opacity="0.6"/>
+              <g stroke="#f2efe9" stroke-width="1" opacity="0.35" fill="none">
+                <path d="M16 116 q10 -5 20 0 t20 0"/><path d="M22 128 q10 -5 20 0 t20 0"/><path d="M16 140 q10 -5 20 0"/>
+              </g>
+              <g stroke="#ffffff" opacity="0.15" stroke-width="1">
+                <path d="M36 258 l44 -22 M316 252 l44 -22 M24 214 l28 -14 M352 208 l28 -14"/>
+              </g>
+              <ellipse cx="215" cy="235" rx="160" ry="30" fill="url(#s-sh)"/>
+              <path d="M200 235 L320 175 L360 195 L240 255 Z" fill="rgba(255,255,255,0.06)" stroke="#f2efe9" stroke-width="1.2"/>
+              <path d="M216 243 L336 183 M228 249 L348 189" stroke="#f2efe9" stroke-width="0.7" opacity="0.4"/>
+              <path d="M80 175 L200 235 L200 183 L80 123 Z" fill="rgba(207,107,63,0.16)" stroke="#f2efe9" stroke-width="1.5"/>
+              <path d="M110 190 V138 M140 205 V153 M170 220 V168" stroke="#f2efe9" stroke-width="1" opacity="0.8"/>
+              <path d="M200 235 L320 175 L320 123 L200 183 Z" fill="rgba(255,255,255,0.06)" stroke="#f2efe9" stroke-width="1.5"/>
+              <path d="M214 228 L214 186 L246 170 L246 212 Z" fill="rgba(207,107,63,0.16)" stroke="#f2efe9" stroke-width="1"/>
+              <path d="M230 220 V178" stroke="#f2efe9" stroke-width="1" opacity="0.8"/>
+              <path d="M266 202 v-30 M290 190 v-30" stroke="#cf6b3f" stroke-width="2"/>
+              <path d="M244 251 V175 M302 222 V146" stroke="#f2efe9" stroke-width="1.5"/>
+              <path d="M66 123 L200 56 L334 123 L200 190 Z" fill="rgba(255,255,255,0.10)" stroke="#f2efe9" stroke-width="1.5"/>
+              <path d="M66 123 L200 190 L200 197 L66 130 Z" fill="rgba(255,255,255,0.16)" stroke="#f2efe9" stroke-width="1.2"/>
+              <path d="M200 190 L334 123 L334 130 L200 197 Z" fill="rgba(255,255,255,0.20)" stroke="#f2efe9" stroke-width="1.2"/>
+              <g font-family="Barlow, sans-serif" font-size="9" fill="rgba(255,255,255,0.6)">
+                <path d="M80 272 H320 M80 267 v10 M320 267 v10" stroke="rgba(255,255,255,0.6)" stroke-width="1" fill="none"/>
+                <text x="200" y="265" text-anchor="middle" letter-spacing="2">15.0 M</text>
+              </g>
             </svg>
           </div>
           <div class="house-info">
             <h3>SAHEL <span class="ar">ساحل</span></h3>
             <p class="house-sub"><em>The coastal bungalow.</em> Single storey, cross-ventilated, deep shaded terrace toward the sea.</p>
             <ul class="house-specs">
-              <li><b>120</b> m²</li>
-              <li><b>2–3</b> bedrooms</li>
-              <li><b>from $138k</b> fixed</li>
-              <li><b>10</b> months</li>
+              <li>120 m²</li>
+              <li>2–3 bedrooms</li>
+              <li>from $138k fixed</li>
+              <li>10 months</li>
             </ul>
           </div>
         </article>
 
-        <article class="house">
+        <article class="house liquid-glass">
           <div class="house-fig">
-            <svg viewBox="0 0 400 300" fill="none" stroke="currentColor" stroke-width="1.5" aria-label="JABAL — axonometric line drawing">
-              <path d="M80 220 L200 160 L320 220 L200 280 Z"/>
-              <path d="M80 220 L80 140 L200 80 L320 140 L320 220"/>
-              <path d="M200 160 L200 80"/>
-              <path d="M80 140 L140 100 L200 130 M320 140 L260 100 L200 130 M140 100 L140 60 L200 30 L260 60 L260 100 M200 130 L200 96 M200 30 L200 62" />
-              <path d="M110 195 L110 155 M160 220 L160 180 M240 220 L240 180 M290 195 L290 155" stroke-width="1"/>
-              <path d="M50 232 L80 220 M320 220 L352 233" stroke-dasharray="4 4" stroke-width="1"/>
+            <svg viewBox="0 0 400 300" aria-label="JABAL — mountain house, isometric drawing">
+              <defs>
+                <radialGradient id="j-sh"><stop offset="0%" stop-color="#ffffff" stop-opacity="0.09"/><stop offset="100%" stop-color="#ffffff" stop-opacity="0"/></radialGradient>
+                <pattern id="j-stone" width="16" height="9" patternUnits="userSpaceOnUse">
+                  <path d="M0 4.5 H16 M4 0 V4.5 M12 4.5 V9" stroke="#ffffff" stroke-width="0.6" opacity="0.35" fill="none"/>
+                </pattern>
+              </defs>
+              <path d="M20 28 h12 M26 22 v12 M368 272 h12 M374 266 v12" stroke="#ffffff" stroke-width="1" opacity="0.3"/>
+              <g stroke="#f2efe9" opacity="0.28" fill="none" stroke-width="1">
+                <path d="M332 44 q36 44 22 96"/><path d="M352 40 q40 52 24 116"/><path d="M370 36 q44 60 26 136"/>
+              </g>
+              <g stroke="#f2efe9">
+                <path d="M52 246 V212" stroke-width="1.5"/>
+                <path d="M38 240 H66 M41 232 H63 M44 224 H60 M47 217 H57 M50 210 H54" stroke-width="2"/>
+              </g>
+              <ellipse cx="205" cy="252" rx="145" ry="26" fill="url(#j-sh)"/>
+              <path d="M90 190 L200 245 L200 207 L90 152 Z" fill="rgba(255,255,255,0.06)" stroke="#f2efe9" stroke-width="1.5"/>
+              <path d="M90 190 L200 245 L200 207 L90 152 Z" fill="url(#j-stone)"/>
+              <path d="M200 245 L310 190 L310 152 L200 207 Z" fill="rgba(255,255,255,0.04)" stroke="#f2efe9" stroke-width="1.5"/>
+              <path d="M200 245 L310 190 L310 152 L200 207 Z" fill="url(#j-stone)"/>
+              <path d="M228 231 L228 196 L244 188 L244 223 Z" fill="rgba(207,107,63,0.3)" stroke="#f2efe9" stroke-width="1"/>
+              <path d="M128 196 v-22" stroke="#cf6b3f" stroke-width="2"/>
+              <path d="M90 152 L200 207 L200 169 L90 114 Z" fill="rgba(255,255,255,0.10)" stroke="#f2efe9" stroke-width="1.5"/>
+              <path d="M106 134 L184 173 L184 187 L106 148 Z" fill="rgba(207,107,63,0.18)" stroke="#f2efe9" stroke-width="1"/>
+              <path d="M125 144 V158 M145 154 V168 M165 164 V178" stroke="#f2efe9" stroke-width="1" opacity="0.8"/>
+              <path d="M200 207 L310 152 L310 114 L200 169 Z" fill="rgba(255,255,255,0.06)" stroke="#f2efe9" stroke-width="1.5"/>
+              <path d="M254 166 v-26 M282 152 v-26" stroke="#cf6b3f" stroke-width="2"/>
+              <path d="M90 114 L145 50 L255 106 L200 169 Z" fill="#cf6b3f" fill-opacity="0.85" stroke="#f2efe9" stroke-width="1.5"/>
+              <path d="M200 169 L310 114 L255 106 Z" fill="rgba(255,255,255,0.12)" stroke="#f2efe9" stroke-width="1.5"/>
+              <path d="M145 50 L200 59 L310 114" stroke="#f2efe9" stroke-width="1" stroke-dasharray="4 4" opacity="0.4" fill="none"/>
+              <path d="M224 92 v-16 l10 -5 v16 Z" fill="rgba(255,255,255,0.15)" stroke="#f2efe9" stroke-width="1"/>
+              <g font-family="Barlow, sans-serif" font-size="9" fill="rgba(255,255,255,0.6)">
+                <path d="M90 272 H310 M90 267 v10 M310 267 v10" stroke="rgba(255,255,255,0.6)" stroke-width="1" fill="none"/>
+                <text x="200" y="265" text-anchor="middle" letter-spacing="2">9.6 M</text>
+              </g>
             </svg>
           </div>
           <div class="house-info">
             <h3>JABAL <span class="ar">جبل</span></h3>
             <p class="house-sub"><em>The mountain house.</em> Two storeys on a slope, Batroun stone base, timber panel upper floor, double-height hearth.</p>
             <ul class="house-specs">
-              <li><b>180</b> m²</li>
-              <li><b>3–4</b> bedrooms</li>
-              <li><b>from $196k</b> fixed</li>
-              <li><b>12</b> months</li>
+              <li>180 m²</li>
+              <li>3–4 bedrooms</li>
+              <li>from $196k fixed</li>
+              <li>12 months</li>
             </ul>
           </div>
         </article>
 
-        <article class="house">
+        <article class="house liquid-glass">
           <div class="house-fig">
-            <svg viewBox="0 0 400 300" fill="none" stroke="currentColor" stroke-width="1.5" aria-label="WADI — courtyard plan line drawing">
-              <rect x="80" y="50" width="240" height="200"/>
-              <rect x="140" y="110" width="120" height="80"/>
-              <path d="M80 50 L140 110 M320 50 L260 110 M80 250 L140 190 M320 250 L260 190" stroke-width="1" stroke-dasharray="4 4"/>
-              <path d="M170 140 h60 M170 160 h60" stroke-width="1"/>
-              <circle cx="200" cy="150" r="12" stroke-width="1"/>
-              <path d="M80 150 h-30 M320 150 h30" stroke-width="1"/>
+            <svg viewBox="0 0 400 300" aria-label="WADI — courtyard house, architectural plan">
+              <path d="M20 28 h12 M26 22 v12 M368 28 h12 M374 22 v12 M20 272 h12 M26 266 v12 M368 272 h12 M374 266 v12" stroke="#ffffff" stroke-width="1" opacity="0.3" fill="none"/>
+              <rect x="60" y="32" width="280" height="236" fill="none" stroke="#ffffff" stroke-width="1" stroke-dasharray="6 5" opacity="0.3"/>
+              <rect x="172" y="112" width="56" height="76" fill="rgba(207,107,63,0.2)"/>
+              <g fill="#f2efe9">
+                <rect x="85" y="50" width="230" height="9"/>
+                <rect x="85" y="241" width="107" height="9"/>
+                <rect x="209" y="241" width="106" height="9"/>
+                <rect x="85" y="59" width="9" height="182"/>
+                <rect x="306" y="59" width="9" height="182"/>
+                <rect x="165" y="105" width="70" height="7"/>
+                <rect x="165" y="188" width="70" height="7"/>
+                <rect x="165" y="112" width="7" height="30"/>
+                <rect x="165" y="157" width="7" height="31"/>
+                <rect x="228" y="112" width="7" height="30"/>
+                <rect x="228" y="157" width="7" height="31"/>
+              </g>
+              <path d="M94 150 H165 M235 150 H306 M140 59 V105 M260 59 V105 M140 195 V241 M260 195 V241" stroke="#f2efe9" stroke-width="1" opacity="0.7" fill="none"/>
+              <path d="M192 241 V224 A17 17 0 0 1 209 241" stroke="#f2efe9" stroke-width="0.8" fill="none" opacity="0.8"/>
+              <path d="M235 142 H250 A15 15 0 0 1 235 157" stroke="#f2efe9" stroke-width="0.8" fill="none" opacity="0.8"/>
+              <path d="M165 157 H150 A15 15 0 0 1 165 142" stroke="#f2efe9" stroke-width="0.8" fill="none" opacity="0.8"/>
+              <g stroke="#f2efe9" fill="none" stroke-width="1">
+                <circle cx="200" cy="150" r="15"/>
+                <path d="M200 135 V165 M185 150 H215 M189 139 L211 161 M211 139 L189 161" opacity="0.55"/>
+                <circle cx="182" cy="124" r="4" stroke-width="0.8"/>
+                <circle cx="217" cy="176" r="5" stroke-width="0.8"/>
+              </g>
+              <g stroke="#f2efe9" stroke-width="0.8" fill="none" opacity="0.65">
+                <rect x="104" y="66" width="28" height="18"/>
+                <path d="M104 72 h28"/>
+                <circle cx="262" cy="216" r="9"/>
+                <path d="M262 203 v-4 M262 229 v4 M249 216 h-4 M275 216 h4"/>
+              </g>
+              <g stroke="#f2efe9" stroke-width="1" fill="none">
+                <circle cx="349" cy="40" r="11"/>
+                <path d="M349 49 V33"/>
+                <path d="M345 36 L349 29 L353 36 Z" fill="#f2efe9" stroke="none"/>
+                <text x="349" y="64" text-anchor="middle" font-family="Barlow, sans-serif" font-size="8" fill="rgba(255,255,255,0.7)" stroke="none">N</text>
+              </g>
+              <g font-family="Barlow, sans-serif" font-size="9" fill="rgba(255,255,255,0.6)">
+                <path d="M85 272 H315 M85 267 v10 M315 267 v10" stroke="rgba(255,255,255,0.6)" stroke-width="1" fill="none"/>
+                <text x="200" y="265" text-anchor="middle" letter-spacing="2">18.4 M</text>
+                <path d="M332 50 V250 M327 50 h10 M327 250 h10" stroke="rgba(255,255,255,0.6)" stroke-width="1" fill="none"/>
+                <text x="344" y="150" text-anchor="middle" letter-spacing="2" transform="rotate(90 344 150)">16.0 M</text>
+              </g>
             </svg>
           </div>
           <div class="house-info">
             <h3>WADI <span class="ar">وادي</span></h3>
             <p class="house-sub"><em>The courtyard house.</em> Rooms wrapped around a planted court — thermal mass, shade and privacy for the valley and the plain.</p>
             <ul class="house-specs">
-              <li><b>240</b> m²</li>
-              <li><b>4–5</b> bedrooms</li>
-              <li><b>from $265k</b> fixed</li>
-              <li><b>12</b> months</li>
+              <li>240 m²</li>
+              <li>4–5 bedrooms</li>
+              <li>from $265k fixed</li>
+              <li>12 months</li>
             </ul>
           </div>
         </article>
 
-        <article class="house house-cta">
+        <article class="house liquid-glass house-cta">
           <div class="house-info">
             <h3>Your plot<span class="dot">.</span></h3>
-            <p class="house-sub"><em>Every BAYT is tuned to its site</em> — orientation, slope, views, municipality. Send us your plot and we'll tell you which model fits, for free.</p>
-            <a class="btn" href="mailto:metagroupearch@gmail.com?subject=BAYT%20—%20plot%20review">Request a plot review →</a>
+            <p class="house-sub"><em>Every BEIT is tuned to its site</em> — orientation, slope, views, municipality. Send us your plot and we'll tell you which model fits, for free.</p>
+            <a class="btn-solid" href="mailto:metagroupearch@gmail.com?subject=BEIT%20—%20plot%20review">Request a plot review
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M7 17L17 7M7 7h10v10"/></svg>
+            </a>
           </div>
         </article>
 
@@ -285,22 +465,22 @@
 
   <!-- ── 06 PROCESS ── -->
   <section id="process">
-    <p class="section-label reveal">The process <span class="ar">الطريقة</span></p>
+    <p class="section-label reveal">// The process <span class="ar">الطريقة</span></p>
     <ol class="steps">
-      <li class="step reveal"><span class="step-num">01</span><div><h3>Choose a model</h3><p>SAHEL, JABAL or WADI — with your finishes, from a curated Lebanese palette.</p></div></li>
-      <li class="step reveal"><span class="step-num">02</span><div><h3>Plot review</h3><p>We check zoning, exploitation ratios and municipality requirements for your land. Free, within two weeks.</p></div></li>
-      <li class="step reveal"><span class="step-num">03</span><div><h3>One signature, one price</h3><p>A single fixed-price contract in USD — design, permits, construction, interior. No revisions to chase.</p></div></li>
-      <li class="step reveal"><span class="step-num">04</span><div><h3>Fabrication</h3><p>Panels, stone and joinery produced off-site by our partner workshops while permits complete.</p></div></li>
-      <li class="step reveal"><span class="step-num">05</span><div><h3>Assembly</h3><p>Weeks on site, not years. You watch a house arrive, not a construction saga.</p></div></li>
-      <li class="step reveal"><span class="step-num">06</span><div><h3>Move in</h3><p>Furnished if you wish — down to the last chair, made in Beirut.</p></div></li>
+      <li class="step liquid-glass reveal"><span class="step-num">01</span><div><h3>Choose a model</h3><p>SAHEL, JABAL or WADI — with your finishes, from a curated Lebanese palette.</p></div></li>
+      <li class="step liquid-glass reveal"><span class="step-num">02</span><div><h3>Plot review</h3><p>We check zoning, exploitation ratios and municipality requirements for your land. Free, within two weeks.</p></div></li>
+      <li class="step liquid-glass reveal"><span class="step-num">03</span><div><h3>One signature, one price</h3><p>A single fixed-price contract in USD — design, permits, construction, interior. No revisions to chase.</p></div></li>
+      <li class="step liquid-glass reveal"><span class="step-num">04</span><div><h3>Fabrication</h3><p>Panels, stone and joinery produced off-site by our partner workshops while permits complete.</p></div></li>
+      <li class="step liquid-glass reveal"><span class="step-num">05</span><div><h3>Assembly</h3><p>Weeks on site, not years. You watch a house arrive, not a construction saga.</p></div></li>
+      <li class="step liquid-glass reveal"><span class="step-num">06</span><div><h3>Move in</h3><p>Furnished if you wish — down to the last chair, made in Beirut.</p></div></li>
     </ol>
   </section>
 
   <!-- ── 07 PARTNERS ── -->
   <section id="partners">
-    <p class="section-label reveal">Made in Lebanon <span class="ar">صنع في لبنان</span></p>
+    <p class="section-label reveal">// Made in Lebanon <span class="ar">صنع في لبنان</span></p>
     <p class="partners-intro reveal">
-      BAYT is built on a network of Lebanese makers — a fixed roster we contract,
+      BEIT is built on a network of Lebanese makers — a fixed roster we contract,
       audit and stand behind, so you don't have to.
     </p>
     <div class="marquee" aria-hidden="true">
@@ -321,15 +501,17 @@
         <span>Glazing — Zahlé</span><span>·</span>
       </div>
     </div>
-    <p class="partners-note reveal"><em>Partner roster announced soon. Workshops and suppliers — <a href="mailto:metagroupearch@gmail.com?subject=BAYT%20—%20partner">join the network</a>.</em></p>
+    <p class="partners-note reveal"><em>Partner roster announced soon. Workshops and suppliers — <a href="mailto:metagroupearch@gmail.com?subject=BEIT%20—%20partner">join the network</a>.</em></p>
   </section>
 
   <!-- ── 08 CTA / FOOTER ── -->
   <footer id="cta">
     <h2 class="cta-big"><span>Your land.</span><span>Our house.</span><span><em>Twelve months.</em></span></h2>
-    <a class="btn btn-big" href="mailto:metagroupearch@gmail.com?subject=BAYT%20—%20plot%20review">Start with a free plot review</a>
+    <a class="btn-solid btn-big" href="mailto:metagroupearch@gmail.com?subject=BEIT%20—%20plot%20review">Start with a free plot review
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M7 17L17 7M7 7h10v10"/></svg>
+    </a>
     <div class="footer-meta">
-      <span>BAYT <span class="ar">بيت</span> — a product line by <a href="https://mtgrp.xyz">MTGRP / Metagroupe</a></span>
+      <span>BEIT <span class="ar">بيت</span> — a product line by <a href="https://mtgrp.xyz">MTGRP / Metagroupe</a></span>
       <span class="footer-cities">Beirut · Madrid · Milan</span>
       <span>© 2026 MTGRP. Prices indicative, fixed at contract.</span>
     </div>
@@ -337,6 +519,6 @@
 
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
-  <script src="script.js?v=2"></script>
+  <script src="script.js?v=4"></script>
 </body>
 </html>

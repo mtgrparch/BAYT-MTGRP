@@ -1,4 +1,4 @@
-# BAYT — بيت
+# BEIT — بيت
 
 Pre-approved, fixed-price productized houses for Lebanon. A product line by
 [MTGRP / Metagroupe](https://mtgrp.xyz):
@@ -33,4 +33,4 @@ Push to GitHub, enable Pages. Add a `CNAME` file when the domain is decided
 - Prices, areas and durations on the house cards (marked "indicative")
 - Partner marquee entries (currently region/craft placeholders)
 - House SVG line drawings → real axonometrics/photos when available
-- Product name **BAYT** itself, if a different name is chosen
+- Product name **BEIT** itself, if a different name is chosen

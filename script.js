@@ -1,10 +1,16 @@
-/* BAYT — scroll choreography (GSAP + ScrollTrigger) */
+/* BEIT — scroll choreography (GSAP + ScrollTrigger) */
 (function () {
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (reduced || typeof gsap === 'undefined') return; // static fallback stays readable
 
   document.body.classList.add('js');
   gsap.registerPlugin(ScrollTrigger);
+
+  const BLUR_FROM = { filter: 'blur(10px)', opacity: 0, y: 20 };
+  const BLUR_TO = { filter: 'blur(0px)', opacity: 1, y: 0, ease: 'power2.out' };
+
+  /* ── hero: staggered blur-in on load ── */
+  gsap.fromTo('.reveal-load', BLUR_FROM, { ...BLUR_TO, duration: 0.8, stagger: 0.14, delay: 0.25 });
 
   /* ── progress bar ── */
   gsap.to('#progress-bar', {
@@ -22,23 +28,25 @@
     ease: 'none',
     scrollTrigger: { trigger: '#hero', start: 'top top', end: 'bottom top', scrub: true }
   });
-  gsap.to('.hero-tag, .hero-kicker, .hero-scroll-hint', {
+  gsap.to('.badge, .hero-tag, .hero-ctas, .hero-stats, .hero-trust', {
     opacity: 0,
     y: -30,
     ease: 'none',
     scrollTrigger: { trigger: '#hero', start: 'top top', end: '45% top', scrub: true }
   });
 
-  /* ── statement: word-by-word ink-in, scrubbed ── */
+  /* ── statement: word-by-word blur-in, scrubbed ── */
   document.querySelectorAll('[data-split]').forEach((el) => {
     el.innerHTML = el.textContent.trim().split(/\s+/)
       .map((w) => `<span class="w">${w}</span>`).join(' ');
-    gsap.to(el.querySelectorAll('.w'), {
-      opacity: 1,
-      stagger: 0.06,
-      ease: 'none',
-      scrollTrigger: { trigger: el, start: 'top 75%', end: 'bottom 45%', scrub: true }
-    });
+    gsap.fromTo(el.querySelectorAll('.w'),
+      { opacity: 0.08, filter: 'blur(6px)', y: 12 },
+      {
+        opacity: 1, filter: 'blur(0px)', y: 0,
+        stagger: 0.06,
+        ease: 'none',
+        scrollTrigger: { trigger: el, start: 'top 75%', end: 'bottom 45%', scrub: true }
+      });
   });
 
   /* ── system: pinned, pillars swap on scrub ── */
@@ -68,7 +76,9 @@
     sysTl.to('#system-axo .hp', {
       strokeDashoffset: 0, stagger: 0.03, duration: 0.5, ease: 'power1.inOut'
     }, 0.05);
-    sysTl.to('#system-axo .hp-hidden', { opacity: 0.45, duration: 0.2 }, 0.65);
+    sysTl.to('#system-axo .hp-hidden', { opacity: 0.4, duration: 0.2 }, 0.65);
+    sysTl.to('#system-axo .axo-ground, #system-axo .axo-tech', { opacity: 1, duration: 0.3 }, 0.35);
+    sysTl.to('#system-axo .axo-fill', { opacity: 1, duration: 0.25, stagger: 0.02 }, 0.72);
 
     // 2 — stamp copies
     sysTl.fromTo('#system-axo .axo-copy',
@@ -88,16 +98,16 @@
         ...move, duration: 0.5, ease: 'power2.inOut'
       }, 2.05);
     });
-    sysTl.to('#system-axo .axo-roof path', { stroke: '#b4552d', duration: 0.4 }, 2.05);
     sysTl.to('#system-axo .axo-label', { opacity: 1, stagger: 0.08, duration: 0.3 }, 2.4);
   }
+
   pillars.forEach((p, i) => {
     sysTl.set(p, { visibility: 'visible' }, i);
     sysTl.fromTo(p,
       { yPercent: i === 0 ? 0 : 12, opacity: i === 0 ? 1 : 0 },
       { yPercent: 0, opacity: 1, duration: 0.35, ease: 'power2.out' }, i);
     sysTl.fromTo(p.querySelector('h2'),
-      { letterSpacing: '0.05em' },
+      { letterSpacing: '0.02em' },
       { letterSpacing: '-0.03em', duration: 0.5, ease: 'power2.out' }, i);
     if (i < pillars.length - 1) {
       sysTl.to(p, { yPercent: -10, opacity: 0, duration: 0.3, ease: 'power2.in' }, i + 0.7);
@@ -137,9 +147,8 @@
 
   /* ── houses: pinned horizontal scroll ── */
   const track = document.querySelector('.houses-track');
-  const housesST = () => -(track.scrollWidth - window.innerWidth + 2 * 16);
   gsap.to(track, {
-    x: housesST,
+    x: () => -(track.scrollWidth - window.innerWidth + 2 * 16),
     ease: 'none',
     scrollTrigger: {
       trigger: '#houses',
@@ -160,26 +169,25 @@
     });
   });
 
-  /* ── generic reveals ── */
+  /* ── generic reveals: blur-in on scroll ── */
   gsap.utils.toArray('.reveal').forEach((el) => {
-    gsap.from(el, {
-      y: 44,
-      opacity: 0,
+    gsap.fromTo(el, BLUR_FROM, {
+      ...BLUR_TO,
       duration: 0.9,
-      ease: 'power3.out',
       scrollTrigger: { trigger: el, start: 'top 85%' }
     });
   });
 
   /* ── footer lines rise in ── */
-  gsap.from('.cta-big span', {
-    yPercent: 110,
-    opacity: 0,
-    stagger: 0.12,
-    duration: 0.9,
-    ease: 'power3.out',
-    scrollTrigger: { trigger: '#cta', start: 'top 70%' }
-  });
+  gsap.fromTo('.cta-big span',
+    { yPercent: 110, opacity: 0, filter: 'blur(8px)' },
+    {
+      yPercent: 0, opacity: 1, filter: 'blur(0px)',
+      stagger: 0.12,
+      duration: 0.9,
+      ease: 'power3.out',
+      scrollTrigger: { trigger: '#cta', start: 'top 70%' }
+    });
 
   /* fonts/images settle → recalc pin distances */
   window.addEventListener('load', () => ScrollTrigger.refresh());
