@@ -32,6 +32,21 @@
     scrollTrigger: { start: 0, end: 'max', scrub: 0.3 }
   });
 
+  /* ── background video: playback position scrubbed by scroll ── */
+  const bgVideo = document.getElementById('bg-video');
+  if (bgVideo) {
+    const wireVideoScrub = () => {
+      bgVideo.pause();
+      gsap.to(bgVideo, {
+        currentTime: Math.max((bgVideo.duration || 1) - 0.05, 0.01),
+        ease: 'none',
+        scrollTrigger: { start: 0, end: 'max', scrub: 0.8 }
+      });
+    };
+    if (bgVideo.readyState >= 1) wireVideoScrub();
+    else bgVideo.addEventListener('loadedmetadata', wireVideoScrub, { once: true });
+  }
+
   /* ── hero: wordmark shrinks & drifts up as you leave ──
      explicit from-values + immediateRender:false — otherwise the scrub
      captures its start while the entrance blur-in still has opacity 0,
