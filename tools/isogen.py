@@ -1,24 +1,21 @@
 # BEIT — isometric cutaway drawing generator
 # 2:1 pixel isometric: a-axis -> (+2,+1)*q, b-axis -> (-2,+1)*q, z -> (0,-1)
-import math
 
 class Scene:
-    def __init__(self, ox, oy, q, ink, paper, system=False):
+    def __init__(self, ox, oy, q, ink, paper, system=False, zoff=0.0):
         self.ox, self.oy, self.q = ox, oy, q
         self.ink, self.paper, self.system = ink, paper, system
+        self.zoff = zoff
         self.items = []  # (sortkey, svg)
 
     def P(self, a, b, z=0.0):
-        return (self.ox + (a - b) * 2 * self.q, self.oy + (a + b) * self.q - z)
+        return (self.ox + (a - b) * 2 * self.q, self.oy + (a + b) * self.q - (z + self.zoff))
 
     def _pts(self, pts):
         return ' '.join(f'{x:.1f} {y:.1f}' for x, y in pts)
 
     def _poly(self, pts):
         return 'M' + self._pts([pts[0]]) + ' L ' + ' L '.join(self._pts([p]) for p in pts[1:]) + ' Z'
-
-    def add_raw(self, key, svg):
-        self.items.append((key, svg))
 
     def fill_stroke(self, key, d, w=1.0, fill=None, dash=None, op=None):
         f = fill if fill else self.paper
@@ -37,7 +34,7 @@ class Scene:
 
     def box(self, a0, b0, da, db, z0, h, w=1.0, key=None):
         a1, b1 = a0 + da, b0 + db
-        k = key if key is not None else (a1 + b1 + z0 * 0.01)
+        k = key if key is not None else (a1 + b1 + z0 * 0.01 + self.zoff * 0.001)
         top = [self.P(a0,b0,z0+h), self.P(a1,b0,z0+h), self.P(a1,b1,z0+h), self.P(a0,b1,z0+h)]
         fa  = [self.P(a1,b0,z0), self.P(a1,b1,z0), self.P(a1,b1,z0+h), self.P(a1,b0,z0+h)]
         fb  = [self.P(a0,b1,z0), self.P(a1,b1,z0), self.P(a1,b1,z0+h), self.P(a0,b1,z0+h)]
@@ -46,22 +43,21 @@ class Scene:
 
     def floor_ellipse(self, a, b, ra, rb, z=0, w=1.0, key=None):
         x, y = self.P(a, b, z)
-        k = key if key is not None else (a + b)
+        k = key if key is not None else (a + b + self.zoff*0.001)
         cls_s = ' class="hp" pathLength="1"' if self.system else ''
         self.items.append((k, f'<ellipse{cls_s} cx="{x:.1f}" cy="{y:.1f}" rx="{ra*2.2*self.q:.1f}" ry="{rb*1.1*self.q:.1f}" fill="{self.paper}" stroke="{self.ink}" stroke-width="{w}"/>'))
 
     def line(self, a0,b0,z0, a1,b1,z1, w=1.0, dash=None, op=None, key=None):
         p0, p1 = self.P(a0,b0,z0), self.P(a1,b1,z1)
-        k = key if key is not None else max(a0+b0, a1+b1)
+        k = key if key is not None else max(a0+b0, a1+b1) + self.zoff*0.001
         self.stroke(k, f'M{p0[0]:.1f} {p0[1]:.1f} L{p1[0]:.1f} {p1[1]:.1f}', w, dash, op)
 
     # ---- furniture ----
     def bed(self, a, b, da, db, key=None):
         k = key if key is not None else a+da+b+db
-        self.box(a, b, da, db, 0, 4, key=k)                       # base
-        self.box(a+0.6, b+0.6, da-1.2, db-1.2, 4, 2, w=0.8, key=k+0.01)  # mattress
-        self.box(a+0.9, b+0.9, 2.0, db-1.8, 6, 1.4, w=0.8, key=k+0.02)   # pillow
-        # blanket fold line
+        self.box(a, b, da, db, 0, 4, key=k)
+        self.box(a+0.6, b+0.6, da-1.2, db-1.2, 4, 2, w=0.8, key=k+0.01)
+        self.box(a+0.9, b+0.9, 2.0, db-1.8, 6, 1.4, w=0.8, key=k+0.02)
         self.line(a+da*0.55, b+0.6, 6.1, a+da*0.55, b+db-0.6, 6.1, w=0.7, key=k+0.03)
 
     def sofa(self, a, b, da, db, back='b0', key=None):
@@ -71,7 +67,7 @@ class Scene:
             self.box(a, b, da, 1.3, 4, 4.5, w=0.8, key=k+0.01)
             self.box(a, b, 1.3, db, 4, 3, w=0.8, key=k+0.02)
             self.box(a+da-1.3, b, 1.3, db, 4, 3, w=0.8, key=k+0.03)
-        else:  # back along a0
+        else:
             self.box(a, b, 1.3, db, 4, 4.5, w=0.8, key=k+0.01)
             self.box(a, b, da, 1.3, 4, 3, w=0.8, key=k+0.02)
             self.box(a, b+db-1.3, da, 1.3, 4, 3, w=0.8, key=k+0.03)
@@ -94,14 +90,12 @@ class Scene:
 
     def round_table(self, a, b, r=2.6, h=7, key=None):
         k = key if key is not None else a+b+3
-        x, y = self.P(a, b, 0)
         self.line(a, b, 0, a, b, h, w=0.8, key=k)
         self.floor_ellipse(a, b, r, r, z=h, w=1.0, key=k+0.01)
 
     def counter(self, a, b, da, db, key=None):
         k = key if key is not None else a+da+b+db
         self.box(a, b, da, db, 0, 9, key=k)
-        # sink + hob on top
         self.stroke(k+0.01, self._poly([self.P(a+1.2,b+0.6,9),self.P(a+3.4,b+0.6,9),self.P(a+3.4,b+db-0.6,9),self.P(a+1.2,b+db-0.6,9)]), w=0.7)
         for i in range(2):
             x,y = self.P(a+da-2.2-i*1.8, b+db/2, 9)
@@ -119,7 +113,6 @@ class Scene:
         k = key if key is not None else a+b+4
         self.floor_ellipse(a, b, 3.2, 1.9, z=4, w=1.0, key=k)
         self.floor_ellipse(a, b, 2.4, 1.3, z=4, w=0.7, key=k+0.01)
-        # faucet
         self.line(a-2.6, b, 4, a-2.6, b, 10, w=0.8, key=k+0.02)
 
     def wc(self, a, b, key=None):
@@ -139,10 +132,6 @@ class Scene:
         self.fill_stroke(k, pot, w=0.8)
         self.stroke(k+0.01, leaves, w=0.8)
 
-    def rug(self, a, b, da, db, key=None):
-        k = key if key is not None else 0  # floor level, draw early
-        self.stroke(k, self._poly([self.P(a,b,0.4),self.P(a+da,b,0.4),self.P(a+da,b+db,0.4),self.P(a,b+db,0.4)]), w=0.7, dash='3 3', op='0.7')
-
     def deck(self, a0, b0, da, db, step=1.6, key=None):
         k = key if key is not None else -1
         d = self._poly([self.P(a0,b0,0.6),self.P(a0+da,b0,0.6),self.P(a0+da,b0+db,0.6),self.P(a0,b0+db,0.6)])
@@ -153,6 +142,17 @@ class Scene:
             if aa >= a0+da: break
             self.line(aa, b0+0.3, 0.6, aa, b0+db-0.3, 0.6, w=0.6, op='0.8', key=k+0.001)
 
+    def stair(self, a, b, run, width, z0, height, n=9, axis='b', key=None):
+        """Ascending stack of step-boxes — simplified isometric stair convention."""
+        k = key if key is not None else a+b+run+width+self.zoff*0.001
+        step_run = run / n
+        step_h = height / n
+        for i in range(n):
+            if axis == 'b':
+                self.box(a, b + i*step_run, width, step_run, z0, (i+1)*step_h, w=0.7, key=k + i*0.001)
+            else:
+                self.box(a + i*step_run, b, step_run, width, z0, (i+1)*step_h, w=0.7, key=k + i*0.001)
+
     # walls: perimeter cut walls with openings. wall runs along a ('A') or b ('B')
     def wall_a(self, a0, a1, b, t, h, gaps=(), key=None):
         segs, cur = [], a0
@@ -161,12 +161,11 @@ class Scene:
             segs.append((g0, g1, kind)); cur = g1
         if cur < a1: segs.append((cur, a1, 'wall'))
         for (s0, s1, kind) in segs:
-            k = key if key is not None else (s1 + b + t)
+            k = key if key is not None else (s1 + b + t + self.zoff*0.001)
             if kind == 'wall':
                 self.box(s0, b, s1-s0, t, 0, h, key=k)
             elif kind == 'win':
-                self.box(s0, b, s1-s0, t, 0, 7, w=0.8, key=k)          # sill band
-            # 'door' -> leave open
+                self.box(s0, b, s1-s0, t, 0, 7, w=0.8, key=k)
 
     def wall_b(self, b0, b1, a, t, h, gaps=(), key=None):
         segs, cur = [], b0
@@ -175,13 +174,13 @@ class Scene:
             segs.append((g0, g1, kind)); cur = g1
         if cur < b1: segs.append((cur, b1, 'wall'))
         for (s0, s1, kind) in segs:
-            k = key if key is not None else (a + s1 + t)
+            k = key if key is not None else (a + s1 + t + self.zoff*0.001)
             if kind == 'wall':
                 self.box(a, s0, t, s1-s0, 0, h, key=k)
             elif kind == 'win':
                 self.box(a, s0, t, s1-s0, 0, 7, w=0.8, key=k)
 
-    def render(self, group_only=False):
+    def render(self):
         self.items.sort(key=lambda it: it[0])
         return ''.join(svg for _, svg in self.items)
 
@@ -189,38 +188,45 @@ class Scene:
 def sahel(ink, paper):
     s = Scene(ox=158, oy=42, q=2.35, ink=ink, paper=paper)
     A, B, WH, T = 44, 26, 15, 1.2
-    # slab under everything
+    x1, x2, x3 = 13, 19, 30   # bed|bath, bath|kitchen, kitchen|living
+    y1 = 13                   # bedroom1 | bedroom2
+
     s.box(-0.8, -0.8, A+1.6, B+1.6, -6, 6, key=-10)
-    # deck toward viewer (a beyond A)
     s.deck(A+0.5, 3, 10, B-6, key=-5)
-    # perimeter walls (cutaway height WH)
-    s.wall_b(0, B, 0, T, WH, gaps=((4,10,'win'),(14,22,'win')), key=0.5)            # back-left long wall
-    s.wall_a(0, A, 0, T, WH, gaps=((6,12,'win'),(20,26,'win'),(33,39,'win')), key=0.6)  # back-right long wall
-    s.wall_b(0, B, A-T, T, WH, gaps=((6,12,'door'),(15,21,'win')))                  # front-right wall to deck
-    s.wall_a(0, A, B-T, T, WH, gaps=((8,13,'win'),(26,30,'door'),(36,41,'win')))    # front-left wall
+
+    # perimeter
+    s.wall_a(0, A, 0, T, WH, gaps=((3,7,'win'),(17,21,'win'),(23,28,'win'),(35,40,'win')))
+    s.wall_a(0, A, B-T, T, WH, gaps=((3,8,'win'),(15,18,'win'),(22,27,'win')))
+    s.wall_b(0, B, 0, T, WH, gaps=((3,7,'win'),(17,21,'win')))
+    s.wall_b(0, B, A-T, T, WH, gaps=((8,14,'door'),(16,22,'win')))
     # partitions
-    s.wall_b(0, B, 28, T, WH, gaps=((10.5,14.5,'door'),))     # living | bedrooms
-    s.wall_a(28+T, A-T, 12.5, T, WH, gaps=((30,33.5,'door'),))  # bed1 | bed2
-    s.wall_b(0, 12.5, 20, T, WH, gaps=((3,6.5,'door'),))      # bath
-    # living zone
-    s.sofa(3, B-8.5, 10, 3.6, back='b0', key=None)
-    s.box(6, B-13.5, 4.5, 2.6, 0, 3, w=0.8)                   # coffee table
-    s.armchair(3.2, B-14.6)
-    s.plant(1.6, B-3.2, 1.0)
-    # dining + kitchen
-    s.counter(15, 1.8, 10, 3.4)
-    s.table(16.5, 8.5, 6.5, 3.6)
-    for (ca, cb) in [(17.2,7.0),(20.5,7.0),(17.2,12.6),(20.5,12.6)]:
+    s.wall_a(0, x1, y1, T, WH, gaps=((5,8,'door'),))
+    s.wall_b(0, B, x1, T, WH, gaps=((4,7,'door'),(18,21,'door')))
+    s.wall_b(0, B, x2, T, WH, gaps=((10,13,'door'),))
+    s.wall_b(0, B, x3, T, WH, gaps=((11,15,'door'),))
+
+    # bedroom 1
+    s.bed(1.5, 1.5, 8, 6)
+    s.wardrobe(1.5, 8.6, 3, 3.2)
+    s.plant(10.6, 11, 0.85)
+    # bedroom 2
+    s.bed(1.5, 15, 8, 6)
+    s.wardrobe(1.5, 22, 3, 3)
+    s.plant(10.6, 24, 0.85)
+    # bathroom (enclosed toilet room)
+    s.tub(16, 4.6)
+    s.wc(14.8, 19.5)
+    # kitchen / dining
+    s.counter(20, 1.6, 8.5, 3.2)
+    s.table(21.5, 9.5, 6, 3.4)
+    for (ca, cb) in [(22.2,8.0),(25.3,8.0),(22.2,13.4),(25.3,13.4)]:
         s.chair(ca, cb)
-    s.plant(26.5, 2.2, 0.9)
-    # bath (a 20..28, b 0..12.5 corner)
-    s.tub(24.5, 4.2)
-    s.wc(21.5, 9.2)
-    # bedrooms
-    s.bed(31.5, 2.0, 8.5, 6.0)
-    s.wardrobe(A-4.6, 8.6, 3.2, 3.6)
-    s.bed(31.5, 15.5, 8.5, 6.0)
-    s.plant(A-2.6, B-2.8, 0.9)
+    s.plant(27.4, 22, 0.9)
+    # living
+    s.sofa(32, 17, 10, 3.6, back='b0')
+    s.box(34.5, 12, 4.2, 2.5, 0, 3, w=0.8)
+    s.armchair(32.2, 10.8)
+    s.plant(31.5, 2, 0.9)
     # deck furniture
     s.chair(A+3.5, 8.5)
     s.round_table(A+5.5, 11.5, r=1.8, h=6)
@@ -229,85 +235,147 @@ def sahel(ink, paper):
 
 
 def jabal(ink, paper):
-    s = Scene(ox=176, oy=44, q=2.35, ink=ink, paper=paper)
-    A, B, WH, T = 36, 24, 15, 1.2
-    # deep stone plinth with course lines
-    s.box(-0.8, -0.8, A+1.6, B+1.6, -12, 12, key=-10)
-    for z in (-8, -4):
-        s.line(A+0.8, -0.8, z+12-12, A+0.8, B+0.8, z, w=0.6, op='0.6', key=-9.9)
-        s.line(-0.8, B+0.8, z, A+0.8, B+0.8, z, w=0.6, op='0.6', key=-9.9)
-    # terrace deck toward viewer
-    s.deck(6, B+1.4, 16, 6, key=-5)
-    # perimeter
-    s.wall_b(0, B, 0, T, WH, gaps=((4,12,'win'),(15,21,'win')))
-    s.wall_a(0, A, 0, T, WH, gaps=((6,12,'win'),(24,30,'win')))
-    s.wall_b(0, B, A-T, T, WH, gaps=((5,11,'win'),(14,20,'win')))
-    s.wall_a(0, A, B-T, T, WH, gaps=((8,14,'door'),(24,29,'win')))
-    # partition living | sleeping
-    s.wall_b(0, B, 21, T, WH, gaps=((9,13,'door'),))
-    s.wall_a(21+T, A-T, 12, T, WH, gaps=((23,26.5,'door'),))
-    # hearth against back wall
-    s.box(9, 1.6, 4.5, 2.2, 0, 14)
-    s.stroke(13.5, s._poly([s.P(10.2,1.7,5),s.P(12.2,1.7,5),s.P(12.2,1.7,10),s.P(10.2,1.7,10)]), w=0.7)
-    # living furniture
-    s.sofa(3, 14, 9.5, 3.6, back='b0')
-    s.box(5.5, 9.2, 4.2, 2.5, 0, 2.6, w=0.8)
-    s.armchair(12.5, 8.2)
-    s.round_table(16.8, 4.6, r=2.2, h=6)
-    s.chair(14.6, 3.2); s.chair(18.6, 6.8)
-    s.plant(1.8, B-2.6, 1.0)
-    s.plant(19.6, B-3.0, 0.9)
-    # sleeping side
-    s.bed(25, 2.2, 8, 6)
-    s.wardrobe(A-4.4, 9.4, 3.0, 3.4)
-    s.tub(26.5, 19.0)
-    s.wc(31.5, 15.0)
-    s.plant(A-2.6, B-2.8, 0.9)
-    return s.render()
+    # "Two storeys on a slope" reads better as a double-height living room
+    # with a partial sleeping loft over the back (kitchen/bath/stair) band
+    # than as a full second full-footprint plate: stacking two complete
+    # same-footprint plates makes the upper one's opaque slab paint over
+    # and hide the entire storey below it. A loft covering only part of
+    # the plan keeps the ground floor visible in front of/below it.
+    A, B, T = 30, 20, 1.2
+    WH = 11              # ground-floor cutaway wall height (all ground rooms)
+    SLAB_T = 1.0
+    LOFT_Z = WH + SLAB_T
+    LOFT_H = 6            # low loft parapet height
+    BACK_B = 9            # depth of the back band the loft sits over
+
+    s = Scene(ox=178, oy=64, q=2.2, ink=ink, paper=paper)
+
+    # stone plinth, coursed
+    s.box(-0.8, -0.8, A+1.6, B+1.6, -10, 10, key=-20)
+    for z in (-7, -3.5):
+        s.line(A+0.8, -0.8, z, A+0.8, B+0.8, z, w=0.55, op='0.6', key=-19.9)
+        s.line(-0.8, B+0.8, z, A+0.8, B+0.8, z, w=0.55, op='0.6', key=-19.9)
+    s.deck(6, B+1.4, 15, 5.5, key=-15)
+    plinth_svg = s.render()
+
+    # ---- ground floor: kitchen, bath, stair hall (back band) + double-height living (front) ----
+    g = Scene(ox=s.ox, oy=s.oy, q=s.q, ink=ink, paper=paper)
+    g.wall_b(0, B, 0, T, WH, gaps=((2,8,'win'),))                       # a=0 outer
+    g.wall_a(0, A, 0, T, WH, gaps=((3,9,'win'),(20,26,'win')))          # b=0 outer (back)
+    g.wall_b(0, B, A-T, T, WH, gaps=((3,8,'win'),(12,17,'win')))        # a=A outer
+    g.wall_a(0, A, B-T, T, WH, gaps=((4,9,'door'),(19,25,'win')))       # b=B outer (front, to deck)
+    g.wall_b(0, BACK_B, 11, T, WH, gaps=((3,6,'door'),))                # kitchen | bath
+    g.wall_b(0, BACK_B, 17, T, WH, gaps=((3,6,'door'),))                # bath | stair hall
+    g.wall_a(0, A, BACK_B, T, WH, gaps=((5,10,'door'),(20,24,'door')))  # back band | living
+
+    # kitchen
+    g.counter(1.6, 1.6, 8, 3.2)
+    g.round_table(4.8, 6.0, r=1.7, h=6)
+    g.chair(3.2, 4.6); g.chair(6.4, 7.4)
+    g.plant(1.8, BACK_B-1.6, 0.75)
+    # ground bathroom
+    g.tub(14, 2.4)
+    g.wc(12.4, 6.6)
+    # stair hall — stair rises to the loft
+    g.stair(18.5, 1.8, 5.4, 4.4, 0, LOFT_Z, n=9, axis='b')
+    g.plant(A-2.2, 1.8, 0.75)
+
+    # living + hearth (double-height — nothing sits above this zone)
+    g.box(2, BACK_B+1.4, 4, 2, 0, 11)
+    g.stroke(400, g._poly([g.P(3,BACK_B+1.5,4),g.P(4.6,BACK_B+1.5,4),g.P(4.6,BACK_B+1.5,8),g.P(3,BACK_B+1.5,8)]), w=0.6)
+    g.sofa(9, B-6.8, 10, 3.4, back='b0')
+    g.armchair(20.5, B-7.6)
+    g.plant(A-2.2, B-2.2, 0.85)
+    g.plant(2, B-2.4, 0.8)
+    ground_svg = g.render()
+
+    # floor slab under the loft only
+    slab = Scene(ox=s.ox, oy=s.oy, q=s.q, ink=ink, paper=paper, zoff=WH)
+    slab.box(-0.4, -0.4, A+0.8, BACK_B+0.8, 0, SLAB_T, w=0.8, key=0)
+    slab_svg = slab.render()
+
+    # ---- loft: one bedroom + ensuite, open rail overlooking the living room ----
+    f = Scene(ox=s.ox, oy=s.oy, q=s.q, ink=ink, paper=paper, zoff=LOFT_Z)
+    f.wall_b(0, BACK_B, 0, T, LOFT_H, gaps=((2,7,'win'),))
+    f.wall_a(0, A, 0, T, LOFT_H, gaps=((4,10,'win'),(18,24,'win')))
+    f.wall_b(0, BACK_B, A-T, T, LOFT_H, gaps=((2,7,'win'),))
+    f.bed(9, 1.2, 8, 5.6)
+    f.wardrobe(19.5, 1.4, 3.2, 3)
+    f.wc(2.2, 4.6)
+    f.plant(A-2.4, BACK_B-2.2, 0.75)
+    # open rail over the living room below
+    rail_b = BACK_B - T - 0.15
+    f.line(1.5, rail_b, 3.4, A-1.5, rail_b, 3.4, w=1.0, key=300)
+    for xa in (5, 10, 15, 20, 25):
+        f.line(xa, rail_b, 0, xa, rail_b, 3.4, w=0.7, key=300.1)
+    loft_svg = f.render()
+
+    return plinth_svg + ground_svg + slab_svg + loft_svg
 
 
 def wadi(ink, paper):
-    s = Scene(ox=196, oy=30, q=2.15, ink=ink, paper=paper)
+    s = Scene(ox=196, oy=26, q=2.05, ink=ink, paper=paper)
     A, B, WH, T = 42, 30, 15, 1.2
-    C = (14, 10, 14, 10)  # court a0,b0,da,db
-    ca0, cb0, cda, cdb = C
+    cx0, cx1 = 11, 31     # courtyard a-range
+    cy0, cy1 = 7, 23      # courtyard b-range  (20 x 16 -- much larger than before)
+
     s.box(-0.8, -0.8, A+1.6, B+1.6, -6, 6, key=-10)
+
     # perimeter
-    s.wall_b(0, B, 0, T, WH, gaps=((4,9,'win'),(13,18,'win'),(22,27,'win')))
-    s.wall_a(0, A, 0, T, WH, gaps=((5,10,'win'),(16,21,'win'),(28,33,'win')))
-    s.wall_b(0, B, A-T, T, WH, gaps=((12,17,'door'),(21,26,'win')))
-    s.wall_a(0, A, B-T, T, WH, gaps=((6,11,'win'),(18,23,'door'),(30,35,'win')))
-    # court walls (low, with wide openings)
-    s.wall_b(cb0, cb0+cdb, ca0, T, WH, gaps=((cb0+3, cb0+7, 'door'),))
-    s.wall_b(cb0, cb0+cdb, ca0+cda-T, T, WH, gaps=((cb0+3, cb0+7, 'door'),))
-    s.wall_a(ca0, ca0+cda, cb0, T, WH, gaps=((ca0+4, ca0+10, 'door'),))
-    s.wall_a(ca0, ca0+cda, cb0+cdb-T, T, WH, gaps=((ca0+4, ca0+10, 'door'),))
-    # court: paved stripes + tree
-    s.deck(ca0+T, cb0+T, cda-2*T, cdb-2*T, step=1.4, key=ca0+cb0+2)
-    s.plant(ca0+cda/2, cb0+cdb/2, 1.6, key=ca0+cda+cb0+cdb)
-    s.plant(ca0+3, cb0+2.4, 0.8, key=ca0+cb0+4)
-    # rooms around court
-    s.sofa(30, 13, 9.5, 3.6, back='b0')       # living east
-    s.box(32.5, 8.4, 4.2, 2.5, 0, 3, w=0.8)
-    s.counter(2, 2, 9, 3.2)                    # kitchen north-west
-    s.table(4, 8.5, 6, 3.4)
-    for (ca_, cb_) in [(4.8,7.0),(7.6,7.0),(4.8,12.4),(7.6,12.4)]:
-        s.chair(ca_, cb_)
-    s.bed(3, 20, 8, 6)                         # bedroom west
-    s.wardrobe(12.5, 25.5, 3.4, 3.4)
-    s.bed(31, 21, 8, 6)                        # bedroom east
-    s.tub(35, 4)                               # bath north-east
-    s.wc(31, 3)
-    s.plant(A-2.5, B-3, 1.0)
-    s.plant(1.8, B-3, 0.9)
+    s.wall_a(0, A, 0, T, WH, gaps=((3,9,'win'),(18,24,'win'),(33,39,'win')))
+    s.wall_a(0, A, B-T, T, WH, gaps=((3,8,'door'),(14,19,'win'),(30,36,'win')))
+    s.wall_b(0, B, 0, T, WH, gaps=((3,8,'win'),(16,21,'win')))
+    s.wall_b(0, B, A-T, T, WH, gaps=((6,11,'win'),(22,27,'win')))
+
+    # ring partitions (west | middle-band | east), pinwheel around the court
+    s.wall_b(0, B, cx0, T, WH, gaps=((9,13,'door'),(18,21,'door')))       # west rooms | court band
+    s.wall_b(0, B, cx1, T, WH, gaps=((10,14,'door'),))                    # east rooms | court band
+    s.wall_a(cx0, cx1, cy0, T, WH, gaps=((17,21,'door'),))                # kitchen | court
+    s.wall_a(cx0, cx1, cy1, T, WH, gaps=((17,21,'door'),))                # south room | court
+    # internal splits within the side bands
+    s.wall_a(0, cx0, 15, T, WH, gaps=((3,6,'door'),))                     # bedroom1 | bedroom2 (west)
+    s.wall_a(cx1, A-T, 20, T, WH, gaps=((33,37,'door'),))                 # living | bath (east)
+
+    # west: two bedrooms
+    s.bed(2, 2, 7.5, 6)
+    s.wardrobe(2, 9.4, 3, 3.4)
+    s.plant(8.6, 12.6, 0.8)
+    s.bed(2, 17, 7.5, 6)
+    s.wardrobe(2, 24.4, 3, 3.4)
+    s.plant(8.6, 27, 0.8)
+
+    # north: kitchen/dining
+    s.counter(13, 1.6, 9, 3.2)
+    s.table(24, 1.8, 5.5, 3.4)
+    s.chair(25, 0.6); s.chair(27.6, 0.6)
+
+    # east: living (with dining) + bath
+    s.sofa(33, 3, 8, 3.4, back='b0')
+    s.box(35, 7.6, 4, 2.4, 0, 3, w=0.8)
+    s.round_table(37.5, 14.5, r=2.0, h=6)
+    s.chair(36.2, 13); s.chair(39.2, 16)
+    s.plant(A-2.2, 2, 0.85)
+    s.tub(37, 24)
+    s.wc(33.2, 27.4)
+
+    # south: entry / guest toilet
+    s.wc(14, 26)
+    s.plant(26, 27.4, 0.9)
+
+    # courtyard: paved centre + trees + outdoor seating
+    s.deck(cx0+T, cy0+T, (cx1-T)-(cx0+T), (cy1-T)-(cy0+T), step=1.5, key=cx0+cy0+2)
+    s.plant((cx0+cx1)/2, (cy0+cy1)/2, 1.9, key=cx0+cx1+cy0+cy1)
+    s.plant(cx0+3, cy1-3, 1.0, key=cx0+cy1+5)
+    s.plant(cx1-3, cy0+3, 1.0, key=cx1+cy0+6)
+    s.round_table((cx0+cx1)/2 + 6, (cy0+cy1)/2 + 3, r=1.6, h=5.5, key=500)
+    s.chair((cx0+cx1)/2 + 5, (cy0+cy1)/2 + 6, key=501)
+    s.chair((cx0+cx1)/2 + 8.5, (cy0+cy1)/2 + 5, key=502)
     return s.render()
 
 
 def system_axo(ink, paper):
-    # simplified furnished plate for the scroll choreography, grouped in layers:
-    # base = slab + deck | wall-left / wall-right = partitions | roof-group = fit-out (lifts up)
-    def collect(build):
-        sc = Scene(ox=200, oy=96, q=2.5, ink=ink, paper=paper, system=True)
+    def collect(build, zoff=0.0):
+        sc = Scene(ox=200, oy=96, q=2.5, ink=ink, paper=paper, system=True, zoff=zoff)
         build(sc)
         return sc.render()
 
@@ -359,10 +427,9 @@ def card_svg(body, label, dim_text, dim_x0, dim_x1):
     reg = f'<path d="M16 22 h10 M21 17 v10 M374 272 h10 M379 267 v10" stroke="{INK_CARD}" stroke-width="0.8" opacity="0.4" fill="none"/>'
     return (f'<svg viewBox="0 0 400 300" aria-label="{label}">{reg}{body}{dims}</svg>')
 
-import io
 out = {}
 out['sahel'] = card_svg(sahel(INK_CARD, PAPER_CARD), 'SAHEL — coastal bungalow, furnished isometric cutaway', '15.0 M', 80, 320)
-out['jabal'] = card_svg(jabal(INK_CARD, PAPER_CARD), 'JABAL — mountain house, furnished isometric cutaway', '9.6 M', 90, 310)
+out['jabal'] = card_svg(jabal(INK_CARD, PAPER_CARD), 'JABAL — mountain house, two-storey furnished isometric cutaway', '9.6 M', 90, 310)
 out['wadi']  = card_svg(wadi(INK_CARD, PAPER_CARD), 'WADI — courtyard house, furnished isometric cutaway', '18.4 M', 85, 315)
 out['system'] = system_axo(INK_SYS, PAPER_SYS)
 
