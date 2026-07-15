@@ -115,10 +115,36 @@ class Scene:
         self.floor_ellipse(a, b, 2.4, 1.3, z=4, w=0.7, key=k+0.01)
         self.line(a-2.6, b, 4, a-2.6, b, 10, w=0.8, key=k+0.02)
 
-    def wc(self, a, b, key=None):
+    def wc(self, a, b, facing='b', key=None):
+        """Toilet at legible scale: cistern box against the wall + bowl ellipse."""
         k = key if key is not None else a+b+3
-        self.box(a, b, 1.5, 1.3, 0, 4, w=0.8, key=k)
-        self.floor_ellipse(a+2.2, b+0.7, 1.1, 0.9, z=3, w=0.8, key=k+0.01)
+        if facing == 'b':   # bowl extends toward +b (viewer-left face)
+            self.box(a, b, 2.4, 1.1, 0, 4.5, w=0.8, key=k)
+            self.floor_ellipse(a+1.2, b+2.3, 1.1, 0.95, z=2.4, w=0.8, key=k+0.01)
+            self.floor_ellipse(a+1.2, b+2.3, 0.7, 0.6, z=2.4, w=0.6, key=k+0.02)
+        else:               # bowl extends toward +a
+            self.box(a, b, 1.1, 2.4, 0, 4.5, w=0.8, key=k)
+            self.floor_ellipse(a+2.3, b+1.2, 1.1, 0.95, z=2.4, w=0.8, key=k+0.01)
+            self.floor_ellipse(a+2.3, b+1.2, 0.7, 0.6, z=2.4, w=0.6, key=k+0.02)
+
+    def basin(self, a, b, key=None):
+        """Vanity unit with basin bowl on top."""
+        k = key if key is not None else a+b+3.5
+        self.box(a, b, 2.6, 1.5, 0, 5.5, w=0.8, key=k)
+        self.floor_ellipse(a+1.3, b+0.75, 0.8, 0.5, z=5.5, w=0.6, key=k+0.01)
+
+    def shower(self, a, b, s=3.4, key=None):
+        """Floor tray outline + drain + head riser."""
+        k = key if key is not None else a+b+2.5
+        self.stroke(k, self._poly([self.P(a,b,0.4),self.P(a+s,b,0.4),self.P(a+s,b+s,0.4),self.P(a,b+s,0.4)]), w=0.8)
+        x, y = self.P(a+s/2, b+s/2, 0.4)
+        self.items.append((k+0.01, f'<circle cx="{x:.1f}" cy="{y:.1f}" r="{0.5*self.q:.1f}" fill="none" stroke="{self.ink}" stroke-width="0.6"/>'))
+        self.line(a+0.5, b+0.5, 0, a+0.5, b+0.5, 9, w=0.8, key=k+0.02)
+        self.line(a+0.5, b+0.5, 9, a+1.6, b+1.6, 8, w=0.8, key=k+0.03)
+
+    def column(self, a, b, h, key=None):
+        k = key if key is not None else a+b+0.5
+        self.box(a-0.55, b-0.55, 1.1, 1.1, 0, h, w=0.8, key=k)
 
     def plant(self, a, b, s=1.0, key=None):
         k = key if key is not None else a+b+2
@@ -204,6 +230,7 @@ def sahel(ink, paper):
     s.wall_b(0, B, x1, T, WH, gaps=((4,7,'door'),(18,21,'door')))
     s.wall_b(0, B, x2, T, WH, gaps=((10,13,'door'),))
     s.wall_b(0, B, x3, T, WH, gaps=((11,15,'door'),))
+    s.wall_a(x1+T, x2, 13, T, WH)   # bathroom | shower-WC split
 
     # bedroom 1
     s.bed(1.5, 1.5, 8, 6)
@@ -213,9 +240,11 @@ def sahel(ink, paper):
     s.bed(1.5, 15, 8, 6)
     s.wardrobe(1.5, 22, 3, 3)
     s.plant(10.6, 24, 0.85)
-    # bathroom (enclosed toilet room)
+    # bathroom (tub + basin) and separate shower + WC room
     s.tub(16, 4.6)
-    s.wc(14.8, 19.5)
+    s.basin(14, 10.2)
+    s.shower(14.6, 14.8)
+    s.wc(14, 21.3, facing='a')
     # kitchen / dining
     s.counter(20, 1.6, 8.5, 3.2)
     s.table(21.5, 9.5, 6, 3.4)
@@ -235,82 +264,82 @@ def sahel(ink, paper):
 
 
 def jabal(ink, paper):
-    # "Two storeys on a slope" reads better as a double-height living room
-    # with a partial sleeping loft over the back (kitchen/bath/stair) band
-    # than as a full second full-footprint plate: stacking two complete
-    # same-footprint plates makes the upper one's opaque slab paint over
-    # and hide the entire storey below it. A loft covering only part of
-    # the plan keeps the ground floor visible in front of/below it.
+    # Exploded two-storey axo: the complete first floor floats well above
+    # the ground floor with dashed corner projection lines — the classic
+    # drawing-set move. Nothing occludes anything; both plates read as
+    # fully furnished cutaways. (A loft/slab hovering just above the cut
+    # walls read as a lid parked on the ground floor.)
     A, B, T = 30, 20, 1.2
-    WH = 11              # ground-floor cutaway wall height (all ground rooms)
-    SLAB_T = 1.0
-    LOFT_Z = WH + SLAB_T
-    LOFT_H = 6            # low loft parapet height
-    BACK_B = 9            # depth of the back band the loft sits over
+    WH = 12          # cutaway wall height, both storeys
+    # zero screen overlap needs LIFT > plate screen height (A+B)*q + walls
+    LIFT = 118       # air between the plates (z units == px)
 
-    s = Scene(ox=178, oy=64, q=2.2, ink=ink, paper=paper)
-
+    s = Scene(ox=178, oy=158, q=2.0, ink=ink, paper=paper)
     # stone plinth, coursed
-    s.box(-0.8, -0.8, A+1.6, B+1.6, -10, 10, key=-20)
-    for z in (-7, -3.5):
+    s.box(-0.8, -0.8, A+1.6, B+1.6, -9, 9, key=-20)
+    for z in (-6, -3):
         s.line(A+0.8, -0.8, z, A+0.8, B+0.8, z, w=0.55, op='0.6', key=-19.9)
         s.line(-0.8, B+0.8, z, A+0.8, B+0.8, z, w=0.55, op='0.6', key=-19.9)
     s.deck(6, B+1.4, 15, 5.5, key=-15)
     plinth_svg = s.render()
 
-    # ---- ground floor: kitchen, bath, stair hall (back band) + double-height living (front) ----
+    # ---- ground floor: living + hearth, kitchen/dining, WC, stair ----
     g = Scene(ox=s.ox, oy=s.oy, q=s.q, ink=ink, paper=paper)
-    g.wall_b(0, B, 0, T, WH, gaps=((2,8,'win'),))                       # a=0 outer
-    g.wall_a(0, A, 0, T, WH, gaps=((3,9,'win'),(20,26,'win')))          # b=0 outer (back)
-    g.wall_b(0, B, A-T, T, WH, gaps=((3,8,'win'),(12,17,'win')))        # a=A outer
-    g.wall_a(0, A, B-T, T, WH, gaps=((4,9,'door'),(19,25,'win')))       # b=B outer (front, to deck)
-    g.wall_b(0, BACK_B, 11, T, WH, gaps=((3,6,'door'),))                # kitchen | bath
-    g.wall_b(0, BACK_B, 17, T, WH, gaps=((3,6,'door'),))                # bath | stair hall
-    g.wall_a(0, A, BACK_B, T, WH, gaps=((5,10,'door'),(20,24,'door')))  # back band | living
+    g.wall_b(0, B, 0, T, WH, gaps=((3,9,'win'),))
+    g.wall_a(0, A, 0, T, WH, gaps=((3,9,'win'),(20,26,'win')))
+    g.wall_b(0, B, A-T, T, WH, gaps=((4,9,'win'),(12,17,'win')))
+    g.wall_a(0, A, B-T, T, WH, gaps=((5,10,'door'),(19,25,'win')))
+    g.wall_b(0, B, 12, T, WH, gaps=((5,9,'door'),(14,17,'door')))   # kitchen wing | living
+    g.wall_a(12+T, A-T, 7, T, WH, gaps=((13.5,16.5,'door'),))       # WC + stair | living
 
-    # kitchen
-    g.counter(1.6, 1.6, 8, 3.2)
-    g.round_table(4.8, 6.0, r=1.7, h=6)
-    g.chair(3.2, 4.6); g.chair(6.4, 7.4)
-    g.plant(1.8, BACK_B-1.6, 0.75)
-    # ground bathroom
-    g.tub(14, 2.4)
-    g.wc(12.4, 6.6)
-    # stair hall — stair rises to the loft
-    g.stair(18.5, 1.8, 5.4, 4.4, 0, LOFT_Z, n=9, axis='b')
-    g.plant(A-2.2, 1.8, 0.75)
-
-    # living + hearth (double-height — nothing sits above this zone)
-    g.box(2, BACK_B+1.4, 4, 2, 0, 11)
-    g.stroke(400, g._poly([g.P(3,BACK_B+1.5,4),g.P(4.6,BACK_B+1.5,4),g.P(4.6,BACK_B+1.5,8),g.P(3,BACK_B+1.5,8)]), w=0.6)
-    g.sofa(9, B-6.8, 10, 3.4, back='b0')
-    g.armchair(20.5, B-7.6)
-    g.plant(A-2.2, B-2.2, 0.85)
-    g.plant(2, B-2.4, 0.8)
+    # kitchen / dining (west wing)
+    g.counter(1.6, 1.6, 7.5, 3.2)
+    g.round_table(5.4, 9.5, r=1.9, h=6)
+    g.chair(3.4, 8.0); g.chair(7.2, 11.2)
+    g.plant(1.8, B-2.6, 0.85)
+    # ground WC (real toilet + basin, its own room)
+    g.wc(14, 1.6, facing='b')
+    g.basin(18.5, 1.6)
+    # stair up
+    g.stair(23.5, 1.6, 4.8, 3.6, 0, WH, n=7, axis='b')
+    # living + hearth (east/front)
+    g.box(A-5.5, 8.5, 3.6, 2, 0, 11)
+    g.stroke(400, g._poly([g.P(A-4.8,8.6,4),g.P(A-3.4,8.6,4),g.P(A-3.4,8.6,8),g.P(A-4.8,8.6,8)]), w=0.6)
+    g.sofa(14, B-6.4, 9.5, 3.4, back='b0')
+    g.armchair(25, B-7.2)
+    g.plant(A-2.2, B-2.4, 0.85)
     ground_svg = g.render()
 
-    # floor slab under the loft only
-    slab = Scene(ox=s.ox, oy=s.oy, q=s.q, ink=ink, paper=paper, zoff=WH)
-    slab.box(-0.4, -0.4, A+0.8, BACK_B+0.8, 0, SLAB_T, w=0.8, key=0)
-    slab_svg = slab.render()
+    # dashed corner projectors between the storeys
+    p = Scene(ox=s.ox, oy=s.oy, q=s.q, ink=ink, paper=paper)
+    for (ca, cb) in [(0,0),(A,0),(0,B),(A,B)]:
+        p.line(ca, cb, WH+1, ca, cb, LIFT-1.5, w=0.6, dash='4 4', op='0.55', key=1000)
+    proj_svg = p.render()
 
-    # ---- loft: one bedroom + ensuite, open rail overlooking the living room ----
-    f = Scene(ox=s.ox, oy=s.oy, q=s.q, ink=ink, paper=paper, zoff=LOFT_Z)
-    f.wall_b(0, BACK_B, 0, T, LOFT_H, gaps=((2,7,'win'),))
-    f.wall_a(0, A, 0, T, LOFT_H, gaps=((4,10,'win'),(18,24,'win')))
-    f.wall_b(0, BACK_B, A-T, T, LOFT_H, gaps=((2,7,'win'),))
-    f.bed(9, 1.2, 8, 5.6)
-    f.wardrobe(19.5, 1.4, 3.2, 3)
-    f.wc(2.2, 4.6)
-    f.plant(A-2.4, BACK_B-2.2, 0.75)
-    # open rail over the living room below
-    rail_b = BACK_B - T - 0.15
-    f.line(1.5, rail_b, 3.4, A-1.5, rail_b, 3.4, w=1.0, key=300)
-    for xa in (5, 10, 15, 20, 25):
-        f.line(xa, rail_b, 0, xa, rail_b, 3.4, w=0.7, key=300.1)
-    loft_svg = f.render()
+    # ---- first floor (floating): two bedrooms + full bathroom ----
+    f = Scene(ox=s.ox, oy=s.oy, q=s.q, ink=ink, paper=paper, zoff=LIFT)
+    f.box(-0.4, -0.4, A+0.8, B+0.8, -1.5, 1.5, w=0.8, key=-10)      # its slab
+    f.wall_b(0, B, 0, T, WH, gaps=((3,9,'win'),))
+    f.wall_a(0, A, 0, T, WH, gaps=((4,10,'win'),(20,26,'win')))
+    f.wall_b(0, B, A-T, T, WH, gaps=((4,9,'win'),(12,17,'win')))
+    f.wall_a(0, A, B-T, T, WH, gaps=((5,11,'win'),(19,24,'win')))
+    f.wall_b(0, B, 12, T, WH, gaps=((8,12,'door'),))                # bed1 | hall+bed2
+    f.wall_a(12+T, A-T, 9, T, WH, gaps=((14,17,'door'),))           # bathroom | bed2
 
-    return plinth_svg + ground_svg + slab_svg + loft_svg
+    f.bed(2, 2, 8, 6)                                               # bedroom 1
+    f.wardrobe(2, 9.4, 3, 3.2)
+    f.plant(9.6, B-3, 0.8)
+    f.bed(20, 12, 8, 6)                                             # bedroom 2
+    f.wardrobe(A-4.4, B-3.4, 3, 3)
+    # bathroom (tub + toilet + basin)
+    f.tub(17, 3.4)
+    f.wc(21.5, 1.6, facing='b')
+    f.basin(25.5, 1.6)
+    # stair void marked on the slab
+    f.stroke(500, f._poly([f.P(23.5,1.6,0.3),f.P(28.3,1.6,0.3),f.P(28.3,5.2,0.3),f.P(23.5,5.2,0.3)]), w=0.6, dash='3 3', op='0.7')
+    first_svg = f.render()
+
+    return plinth_svg + ground_svg + proj_svg + first_svg
 
 
 def wadi(ink, paper):
@@ -321,17 +350,20 @@ def wadi(ink, paper):
 
     s.box(-0.8, -0.8, A+1.6, B+1.6, -6, 6, key=-10)
 
-    # perimeter
+    # perimeter — front door aligned with the entry path into the court
     s.wall_a(0, A, 0, T, WH, gaps=((3,9,'win'),(18,24,'win'),(33,39,'win')))
-    s.wall_a(0, A, B-T, T, WH, gaps=((3,8,'door'),(14,19,'win'),(30,36,'win')))
+    s.wall_a(0, A, B-T, T, WH, gaps=((18.5,23,'door'),(3,8,'win'),(30,36,'win')))
     s.wall_b(0, B, 0, T, WH, gaps=((3,8,'win'),(16,21,'win')))
     s.wall_b(0, B, A-T, T, WH, gaps=((6,11,'win'),(22,27,'win')))
 
-    # ring partitions (west | middle-band | east), pinwheel around the court
-    s.wall_b(0, B, cx0, T, WH, gaps=((9,13,'door'),(18,21,'door')))       # west rooms | court band
-    s.wall_b(0, B, cx1, T, WH, gaps=((10,14,'door'),))                    # east rooms | court band
-    s.wall_a(cx0, cx1, cy0, T, WH, gaps=((17,21,'door'),))                # kitchen | court
-    s.wall_a(cx0, cx1, cy1, T, WH, gaps=((17,21,'door'),))                # south room | court
+    # court ring: wide openings on the camera-facing sides, and the whole
+    # south edge is an open COLONNADE — entry path runs straight in
+    s.wall_b(0, B, cx0, T, WH, gaps=((9,13,'door'),(18,21,'door')))       # west rooms | court
+    s.wall_b(0, B, cx1, T, WH, gaps=((11,17,'door'),))                    # east rooms | court (wide)
+    s.wall_a(cx0, cx1, cy0, T, WH, gaps=((16,22,'door'),))                # kitchen | court (wide)
+    s.wall_a(cx0, 17, cy1, T, WH)                                          # guest-WC room north wall
+    for ca in (19.5, 23.5, 27.5):                                          # colonnade posts
+        s.column(ca, cy1+0.6, WH, key=ca+cy1+2)
     # internal splits within the side bands
     s.wall_a(0, cx0, 15, T, WH, gaps=((3,6,'door'),))                     # bedroom1 | bedroom2 (west)
     s.wall_a(cx1, A-T, 20, T, WH, gaps=((33,37,'door'),))                 # living | bath (east)
@@ -349,27 +381,33 @@ def wadi(ink, paper):
     s.table(24, 1.8, 5.5, 3.4)
     s.chair(25, 0.6); s.chair(27.6, 0.6)
 
-    # east: living (with dining) + bath
+    # east: living + full bathroom (tub, toilet, basin)
     s.sofa(33, 3, 8, 3.4, back='b0')
     s.box(35, 7.6, 4, 2.4, 0, 3, w=0.8)
     s.round_table(37.5, 14.5, r=2.0, h=6)
     s.chair(36.2, 13); s.chair(39.2, 16)
     s.plant(A-2.2, 2, 0.85)
-    s.tub(37, 24)
-    s.wc(33.2, 27.4)
+    s.tub(35, 23.5)
+    s.wc(38.5, 26.5, facing='b')
+    s.basin(32.4, 26.8)
 
-    # south: entry / guest toilet
-    s.wc(14, 26)
-    s.plant(26, 27.4, 0.9)
+    # south: enclosed guest WC room (west of the entry path)
+    s.wall_b(cy1, B, 17, T, WH, gaps=((25.5,28.5,'door'),))   # its east wall + door
+    s.wc(12.6, cy1+1.4, facing='b')
+    s.basin(14.6, B-2.9)
+    s.plant(26.5, 27.4, 0.9)
+
+    # entry path: paving from the front door through the colonnade into the court
+    s.deck(18.5, cy1, 4.6, B-cy1-T, step=1.5, key=cx0+cy1+1)
 
     # courtyard: paved centre + trees + outdoor seating
     s.deck(cx0+T, cy0+T, (cx1-T)-(cx0+T), (cy1-T)-(cy0+T), step=1.5, key=cx0+cy0+2)
-    s.plant((cx0+cx1)/2, (cy0+cy1)/2, 1.9, key=cx0+cx1+cy0+cy1)
+    s.plant((cx0+cx1)/2 - 3, (cy0+cy1)/2 - 1, 1.9, key=cx0+cx1+cy0+cy1)
     s.plant(cx0+3, cy1-3, 1.0, key=cx0+cy1+5)
     s.plant(cx1-3, cy0+3, 1.0, key=cx1+cy0+6)
-    s.round_table((cx0+cx1)/2 + 6, (cy0+cy1)/2 + 3, r=1.6, h=5.5, key=500)
-    s.chair((cx0+cx1)/2 + 5, (cy0+cy1)/2 + 6, key=501)
-    s.chair((cx0+cx1)/2 + 8.5, (cy0+cy1)/2 + 5, key=502)
+    s.round_table((cx0+cx1)/2 + 5, (cy0+cy1)/2 + 2.5, r=1.6, h=5.5, key=500)
+    s.chair((cx0+cx1)/2 + 4, (cy0+cy1)/2 + 5.5, key=501)
+    s.chair((cx0+cx1)/2 + 7.5, (cy0+cy1)/2 + 4.5, key=502)
     return s.render()
 
 
