@@ -32,15 +32,27 @@
     scrollTrigger: { start: 0, end: 'max', scrub: 0.3 }
   });
 
-  /* ── background video: playback position scrubbed by scroll ── */
+  /* ── background video: playback position scrubbed by scroll ──
+     seeks go through a proxy with a seeking-guard: issuing a new seek
+     while one is still decoding makes the browser cancel/stack them
+     and the frame freezes mid-page */
   const bgVideo = document.getElementById('bg-video');
   if (bgVideo) {
     const wireVideoScrub = () => {
       bgVideo.pause();
-      gsap.to(bgVideo, {
-        currentTime: Math.max((bgVideo.duration || 1) - 0.05, 0.01),
+      const end = Math.max((bgVideo.duration || 1) - 0.05, 0.01);
+      const proxy = { t: 0 };
+      const apply = () => {
+        if (!bgVideo.seeking && Math.abs(bgVideo.currentTime - proxy.t) > 0.03) {
+          bgVideo.currentTime = proxy.t;
+        }
+      };
+      bgVideo.addEventListener('seeked', apply); // catch up if target moved mid-seek
+      gsap.to(proxy, {
+        t: end,
         ease: 'none',
-        scrollTrigger: { start: 0, end: 'max', scrub: 0.8 }
+        scrollTrigger: { start: 0, end: 'max', scrub: 0.8 },
+        onUpdate: apply
       });
     };
     if (bgVideo.readyState >= 1) wireVideoScrub();
