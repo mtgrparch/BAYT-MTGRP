@@ -25,7 +25,7 @@ python -m http.server
 ## Deploy
 
 Push to GitHub, enable Pages. Add a `CNAME` file when the domain is decided
-(e.g. `bayt.mtgrp.xyz` — then add a DNS CNAME record pointing to
+(e.g. `beit.mtgrp.xyz` — then add a DNS CNAME record pointing to
 `<user>.github.io`).
 
 ## Placeholders to replace before launch
